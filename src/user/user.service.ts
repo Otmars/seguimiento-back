@@ -21,7 +21,7 @@ export class UserService {
     const datofecha= fnacimiento.split("-")
 
     const nuevapassword =datofecha[2]+"-"+datofecha[1]+"-"+datofecha[0]
-    console.log(nuevapassword);
+    // console.log(nuevapassword);
     
     const passCryps = await hash(nuevapassword, 10);
     createUserDto = { ...createUserDto, password: passCryps };
@@ -31,7 +31,7 @@ export class UserService {
     const {ci}=createUserDto
     
     createUserDto = { ...createUserDto, username:primernombre[0]+"_"+ci };
-    console.log(createUserDto);
+    // console.log(createUserDto);
     const userFound = await this.userRepository.findOne({
       where: {
         username: primernombre[0]+"_"+ci ,

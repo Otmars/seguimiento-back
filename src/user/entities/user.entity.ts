@@ -3,7 +3,7 @@ import { Entity,Column,PrimaryGeneratedColumn, JoinColumn,OneToOne, OneToMany } 
 import { Profile } from "./profile.entity";
 export enum UserRole {
     ADMIN = 'admin',
-    ESTUDIANTE = 'estudiente',
+    ESTUDIANTE = 'estudiante',
     DOCENTE = 'docente',
   }
 @Entity({name: 'user'})
