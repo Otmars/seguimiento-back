@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { DocenteService } from './docente.service';
 import { CreateDocenteDto } from './dto/create-docente.dto';
@@ -10,8 +10,17 @@ export class DocenteController {
   constructor(private readonly docenteService: DocenteService) {}
 
   @Post()
-  create(@Body() createDocenteDto: CreateDocenteDto) {
-    return this.docenteService.create(createDocenteDto);
+  async create(@Body() createDocenteDto: CreateDocenteDto) {
+    try {
+    return  await this.docenteService.create(createDocenteDto)
+    } catch (error) { 
+      throw new HttpException({
+        status: HttpStatus.FORBIDDEN,
+        error: error,
+      }, HttpStatus.FORBIDDEN, {
+        cause: error
+      });
+    }
   }
 
   @Get()

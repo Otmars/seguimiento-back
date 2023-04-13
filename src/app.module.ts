@@ -14,6 +14,9 @@ import { DocenteModule } from './docente/docente.module';
 import { CalificacionModule } from './calificacion/calificacion.module';
 import { AppDataSource } from './db/data-source';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Docente } from './docente/entities/docente.entity';
+import { Asignatura } from './asignatura/entities/asignatura.entity';
+
 
 @Module({
   imports: [
@@ -25,7 +28,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [User, Post, Profile],
+      entities: [User, Docente,Asignatura ],
       synchronize: true,
     }),
     UserModule,
@@ -35,6 +38,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     EstudianteModule,
     DocenteModule,
     CalificacionModule,
+
   ],
   controllers: [AppController],
   providers: [AppService],

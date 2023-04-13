@@ -15,6 +15,6 @@ export class Post {
     @Column()
     autorId:string
     
-    @ManyToOne(()=> User, user => user.posts,{onDelete:"CASCADE"})
-    autor:string
+    // @ManyToOne(()=> User, user => user.posts,{onDelete:"CASCADE"})
+    // autor:string
 }

@@ -7,13 +7,16 @@ import { Profile } from './entities/profile.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt';
+import { Docente } from 'src/docente/entities/docente.entity';
+import { DocenteModule } from 'src/docente/docente.module';
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Profile]),
+    DocenteModule,
+    TypeOrmModule.forFeature([User, Profile ,Docente]),
     PassportModule,
     JwtModule.register({
       secret: 'mi clave secreta',
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '1h' },
     }),
   ],
   controllers: [UserController],

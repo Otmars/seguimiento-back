@@ -8,6 +8,8 @@ import { CreateProfileDto } from './dto/create-profile.dto';
 import { Profile } from './entities/profile.entity';
 import { compare, hash } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt/dist';
+import { Docente } from 'src/docente/entities/docente.entity';
+import { DocenteService } from 'src/docente/docente.service';
 
 @Injectable()
 export class UserService {
@@ -15,7 +17,11 @@ export class UserService {
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Profile) private profileRepository: Repository<Profile>,
     private jwtService: JwtService,
-  ) {}
+    
+    // @InjectRepository(Docente) private docenteRepository: Repository<Docente>,
+    
+    private docenteService:DocenteService
+    ) {}
   async create(createUserDto: CreateUserDto) {
     const { fnacimiento } = createUserDto;
     const datofecha= fnacimiento.split("-")
@@ -37,13 +43,21 @@ export class UserService {
         username: primernombre[0]+"_"+ci ,
       },
     });
+    console.log(createUserDto);
     if (userFound) {
       return new HttpException('Usuario ya existe', HttpStatus.CONFLICT); //throw en lugar del return
     }
-    const newUser = this.userRepository.create(createUserDto);
     
     
-    return this.userRepository.save(newUser);
+    
+    const newUser = await this.userRepository.create(createUserDto);
+    
+    const savedUser = await this.userRepository.save(newUser)
+    // this.docenteRepository.save({user: newUser.id})
+    const id ={iduser : savedUser.id}
+    this.docenteService.create(id)
+    return savedUser;
+  
   }
 
   async findAll() {
@@ -95,10 +109,10 @@ export class UserService {
     if (!userFound) {
       return new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
-    const newProfile = this.profileRepository.create(createProfileDto);
-    const savedProfile = await this.profileRepository.save(newProfile);
-    userFound.profile = savedProfile;
-
+    // const newProfile = this.profileRepository.create(createProfileDto);
+    // const savedProfile = await this.profileRepository.save(newProfile);
+    // userFound.profile = savedProfile;
+    
     return this.userRepository.save(userFound);
   }
   async getProfiles() {

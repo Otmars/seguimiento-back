@@ -7,15 +7,6 @@ export class Profile{
     id:number
 
     @Column()
-    nombre:string
+    nombreRol:string
 
-    @Column()
-    apellido:string
-
-    @Column({nullable:true})
-    edad:number
-
-    // @OneToOne(()=>User, (user)=> user.profile,{onDelete:"CASCADE"})
-    // user:User
-    
 }

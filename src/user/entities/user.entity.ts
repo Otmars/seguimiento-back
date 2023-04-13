@@ -57,10 +57,10 @@ export class User {
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   createAt: Date;
 
-  @OneToOne(() => Profile)
-  @JoinColumn()
-  profile: Profile;
+  // @OneToOne(() => Profile)
+  // @JoinColumn()
+  // profile: Profile;
 
-  @OneToMany(() => Post, (post) => post.autor)
-  posts: Post[];
+  // @OneToMany(() => Post, (post) => post.autor)
+  // posts: Post[];
 }
