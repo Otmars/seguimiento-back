@@ -1,12 +1,23 @@
-import { Entity,Column,PrimaryGeneratedColumn, JoinColumn, PrimaryColumn, OneToOne } from "typeorm";
-import { User } from "./user.entity";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+  PrimaryColumn,
+  OneToOne,
+  OneToMany,
+} from 'typeorm';
+import { User } from './user.entity';
 
 @Entity()
-export class Profile{
-    @PrimaryGeneratedColumn()
-    id:number
+export class Roles {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    nombreRol:string
+  @Column()
+  nombreRol: string;
 
+  @OneToMany(() => User, (user) => user.rol)
+  rol: Roles[];
 }
+ 

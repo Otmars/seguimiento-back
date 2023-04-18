@@ -9,10 +9,11 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt';
 import { Docente } from 'src/docente/entities/docente.entity';
 import { DocenteModule } from 'src/docente/docente.module';
+import { Roles } from './entities/roles.entity';
 @Module({
   imports: [
     DocenteModule,
-    TypeOrmModule.forFeature([User, Profile ,Docente]),
+    TypeOrmModule.forFeature([User, Profile ,Docente , Roles]),
     PassportModule,
     JwtModule.register({
       secret: 'mi clave secreta',

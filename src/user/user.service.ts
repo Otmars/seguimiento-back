@@ -66,9 +66,9 @@ export class UserService {
 
   async findOne(id: string) {
     const userFound = await this.userRepository.find({
-      select: { username: true },
+      // select: { username: true },
       where: { id },
-      relations: ['posts', 'profile'],
+      relations: ['rol'],
     });
     if (!userFound) {
       return new HttpException('Usuario no existe', HttpStatus.NOT_FOUND);
@@ -121,8 +121,13 @@ export class UserService {
     });
   }
   async login(createUserDto: CreateUserDto) {
+    console.log(createUserDto);
+    
     const { username, password } = createUserDto;
-    const finduser = await this.userRepository.findOne({ where: { username } });
+    
+    
+    const finduser = await this.userRepository.findOne({ where: { username } , relations : ['rol'] });
+
     if (!finduser) {
       return new HttpException('El usuario no existe', HttpStatus.NOT_FOUND);
     }
@@ -134,7 +139,7 @@ export class UserService {
     const token = await this.jwtService.sign({
       id: finduser.id,
       username: finduser.username,
-      roles: finduser.roles,
+      rol:finduser.rol.nombreRol,
       nombres:finduser.nombres,
       apellidoPaterno: finduser.apellidoPaterno,
       apellidoMaterno:finduser.apellidoMaterno,
@@ -148,6 +153,8 @@ export class UserService {
       //user: finduser,
       token,
     };
+
+    
     return data;
   }
 }

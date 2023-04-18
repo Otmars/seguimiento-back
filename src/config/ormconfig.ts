@@ -1,18 +1,20 @@
 
+import { ConfigModule } from '@nestjs/config';
 import { Post } from 'src/post/entities/post.entity';
 import { Profile } from 'src/user/entities/profile.entity';
 import { User } from 'src/user/entities/user.entity';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
-const usuario = process.env.DATABASE_USER
-
-export const AppDataSource:DataSourceOptions = {
+ConfigModule.forRoot({
+  envFilePath: '.env'
+})
+const options = {
   type: 'mysql',
-  host: 'localhost',
-  port: 3306,
-  username: usuario,
-  password: '',
-  database: 'api-login',
+  host: process.env.DATABASE_HOST,
+  port: process.env.DATABASE_PORT,
+  username: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME,
   entities: [User, Post, Profile],
   synchronize: true,
   // autoLoadEntities: true
@@ -20,4 +22,6 @@ export const AppDataSource:DataSourceOptions = {
   migrationsTableName: "custom_migration_table",
 };
 
-export default DataSource;
+export const dataSource = new DataSource(
+  options as DataSourceOptions,
+);

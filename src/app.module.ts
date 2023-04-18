@@ -5,17 +5,17 @@ import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
 import { PostModule } from './post/post.module';
-import { Post } from './post/entities/post.entity';
-import { Profile } from './user/entities/profile.entity';
+
 import { CompetenciaModule } from './competencia/competencia.module';
 import { AsignaturaModule } from './asignatura/asignatura.module';
 import { EstudianteModule } from './estudiante/estudiante.module';
 import { DocenteModule } from './docente/docente.module';
 import { CalificacionModule } from './calificacion/calificacion.module';
-import { AppDataSource } from './db/data-source';
+
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Docente } from './docente/entities/docente.entity';
 import { Asignatura } from './asignatura/entities/asignatura.entity';
+import { Roles } from './user/entities/roles.entity';
 
 
 @Module({
@@ -28,7 +28,7 @@ import { Asignatura } from './asignatura/entities/asignatura.entity';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [User, Docente,Asignatura ],
+      entities: [User, Docente,Asignatura,Roles],
       synchronize: true,
     }),
     UserModule,
