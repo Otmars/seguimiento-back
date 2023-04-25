@@ -5,32 +5,45 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Docente } from './entities/docente.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/user/entities/user.entity';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class DocenteService {
-  constructor(@InjectRepository(Docente) private docenteRepository: Repository<Docente>,
-  @InjectRepository(User) private userRepository: Repository<User>){}
+  constructor(
+    @InjectRepository(Docente) private docenteRepository: Repository<Docente>,
+    @InjectRepository(User) private userRepository: Repository<User>,
+    private userService : UserService
+      ) {}
 
   async create(createDocenteDto: CreateDocenteDto) {
+    const newdocente = createDocenteDto
+
     // console.log(createDocenteDto);
-    const {iduser} = createDocenteDto;
-    const userFound = await this.userRepository.findOne({
-      where: {
-        id: iduser},
+    // const { iduser } = createDocenteDto;
+    // const userFound = await this.userRepository.findOne({
+    //   where: {
+    //     id: iduser,
+    //   },
+    // });
+    // if (!userFound) {
+    //   return new HttpException('Usuario no existe', HttpStatus.CONFLICT); //throw en lugar del return
+    // }
+    // const newDocente = this.docenteRepository.create(createDocenteDto);
+    // return this.docenteRepository.save(newDocente);
+    // this.userService.create(newdocente)  
+  }
+
+  async findAll() {
+    return await this.docenteRepository.find({
+      relations: ['iduser'],
     });
-    if (!userFound) {
-      return new HttpException('Usuario no existe', HttpStatus.CONFLICT); //throw en lugar del return
-    }
-    const newDocente = this.docenteRepository.create(createDocenteDto)
-    return this.docenteRepository.save(newDocente);
   }
 
-  findAll() {
-    return `This action returns all docente`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} docente`;
+  async findOne(id: number) {
+    return await this.docenteRepository.find({
+      where: { id },
+      relations: ['iduser'],
+    });
   }
 
   update(id: number, updateDocenteDto: UpdateDocenteDto) {

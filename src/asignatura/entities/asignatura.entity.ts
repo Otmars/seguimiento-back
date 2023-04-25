@@ -1,10 +1,11 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Docente } from 'src/docente/entities/docente.entity';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'asignatura' })
 export class Asignatura {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
-
+  
   @Column()
   nombre: string;
 
@@ -23,6 +24,13 @@ export class Asignatura {
   @Column()
   nMeses: number;
 
-  @Column()
+  @Column({default:"ninguno"})
   prerequisito: string;
+
+  @Column()
+  paralelo:string;
+  
+  @ManyToOne(()=>Docente, (docente)=> docente.asignatura)
+  docente: Docente
+
 }

@@ -16,6 +16,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Docente } from './docente/entities/docente.entity';
 import { Asignatura } from './asignatura/entities/asignatura.entity';
 import { Roles } from './user/entities/roles.entity';
+import { Estudiante } from './estudiante/entities/estudiante.entity';
 
 
 @Module({
@@ -28,7 +29,7 @@ import { Roles } from './user/entities/roles.entity';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [User, Docente,Asignatura,Roles],
+      entities: [User, Docente,Asignatura,Roles,Estudiante],
       synchronize: true,
     }),
     UserModule,

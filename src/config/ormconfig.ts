@@ -1,10 +1,11 @@
 
 import { ConfigModule } from '@nestjs/config';
+import { Estudiante } from 'src/estudiante/entities/estudiante.entity';
 import { Post } from 'src/post/entities/post.entity';
 import { Profile } from 'src/user/entities/profile.entity';
 import { User } from 'src/user/entities/user.entity';
-import { DataSource, DataSourceOptions } from 'typeorm';
-
+import { DataSource } from 'typeorm';
+import {DataSourceOptions} from 'typeorm/data-source'
 ConfigModule.forRoot({
   envFilePath: '.env'
 })
@@ -15,7 +16,7 @@ const options = {
   username: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
-  entities: [User, Post, Profile],
+  entities: [User, Post, Profile,Estudiante],
   synchronize: true,
   // autoLoadEntities: true
   migrations: [User],

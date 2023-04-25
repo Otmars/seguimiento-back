@@ -10,10 +10,10 @@ import { JwtStrategy } from './jwt';
 import { Docente } from 'src/docente/entities/docente.entity';
 import { DocenteModule } from 'src/docente/docente.module';
 import { Roles } from './entities/roles.entity';
+import { Estudiante } from 'src/estudiante/entities/estudiante.entity';
 @Module({
   imports: [
-    DocenteModule,
-    TypeOrmModule.forFeature([User, Profile ,Docente , Roles]),
+    TypeOrmModule.forFeature([User, Profile ,Docente , Roles, Estudiante]),
     PassportModule,
     JwtModule.register({
       secret: 'mi clave secreta',

@@ -1,11 +1,7 @@
 import { Post } from "src/post/entities/post.entity";
 import { Entity,Column,PrimaryGeneratedColumn, JoinColumn,OneToOne, OneToMany, ManyToOne } from "typeorm";
 import { Roles } from "./roles.entity";
-export enum UserRole {
-    ADMIN = 'admin',
-    ESTUDIANTE = 'estudiante',
-    DOCENTE = 'docente',
-  }
+
 @Entity({name: 'user'})
 export class User {
     

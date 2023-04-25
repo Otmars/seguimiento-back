@@ -9,59 +9,80 @@ import { Profile } from './entities/profile.entity';
 import { compare, hash } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt/dist';
 import { Docente } from 'src/docente/entities/docente.entity';
-import { DocenteService } from 'src/docente/docente.service';
+import { Estudiante } from 'src/estudiante/entities/estudiante.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Profile) private profileRepository: Repository<Profile>,
+    @InjectRepository(Docente) private docenteRepository: Repository<Docente>,
+    @InjectRepository(Estudiante)
+    private estudianteRepository: Repository<Estudiante>,
     private jwtService: JwtService,
-    
-    // @InjectRepository(Docente) private docenteRepository: Repository<Docente>,
-    
-    private docenteService:DocenteService
-    ) {}
+  ) // @InjectRepository(Docente) private docenteRepository: Repository<Docente>,
+
+  {}
   async create(createUserDto: CreateUserDto) {
     const { fnacimiento } = createUserDto;
-    const datofecha= fnacimiento.split("-")
+    const datofecha = fnacimiento.split('-');
 
-    const nuevapassword =datofecha[2]+"-"+datofecha[1]+"-"+datofecha[0]
+    const nuevapassword =
+      datofecha[2] + '-' + datofecha[1] + '-' + datofecha[0];
     // console.log(nuevapassword);
-    
+
     const passCryps = await hash(nuevapassword, 10);
     createUserDto = { ...createUserDto, password: passCryps };
 
-    const {nombres} = createUserDto;
-    const primernombre= nombres.split(" ")
-    const {ci}=createUserDto
-    
-    createUserDto = { ...createUserDto, username:primernombre[0]+"_"+ci };
-    // console.log(createUserDto);
+    const { nombres } = createUserDto;
+    const primernombre = nombres.split(' ');
+    const { ci } = createUserDto;
+    const { role } = createUserDto;
+    createUserDto = { ...createUserDto, username: primernombre[0] + '_' + ci };
     const userFound = await this.userRepository.findOne({
       where: {
-        username: primernombre[0]+"_"+ci ,
+        username: primernombre[0] + '_' + ci,
       },
     });
-    console.log(createUserDto);
     if (userFound) {
       return new HttpException('Usuario ya existe', HttpStatus.CONFLICT); //throw en lugar del return
     }
-    
-    
-    
+
     const newUser = await this.userRepository.create(createUserDto);
-    
-    const savedUser = await this.userRepository.save(newUser)
+
+    const savedUser = await this.userRepository.save(newUser);
     // this.docenteRepository.save({user: newUser.id})
-    const id ={iduser : savedUser.id}
-    this.docenteService.create(id)
+    const datosEstudiante = {
+      ru: createUserDto.ru,
+      iduser:savedUser.id
+    };
+    const id = { iduser: savedUser.id };
+
+
+    // if (roles.toString() == 'docente') {
+    // }
+
+    if(createUserDto.role == 1){
+      this.docenteRepository.save(id)
+    }
+    if(createUserDto.role == 3){
+      this.estudianteRepository.save(datosEstudiante)
+    }
+    // }
+    // if (savedUser.rol.nombreRol == "estudiante") {
+    //   this.estudianteRepository.save(id)
+    //   console.log("entro");
+
+    // }
+    // this.docenteRepository.create(id)
+    // this.docenteRepository.save(id)
     return savedUser;
-  
   }
 
   async findAll() {
-    return await this.userRepository.find();
+    return await this.userRepository.find({
+      relations: ['rol'],
+    });
   }
 
   async findOne(id: string) {
@@ -100,7 +121,7 @@ export class UserService {
     if (result.affected === 0) {
       return new HttpException('Usuario no existe', HttpStatus.NOT_FOUND);
     }
-    return result;
+    return { result, resultado: 'Usuario Eliminado' };
   }
   async createProfile(id: string, createProfileDto: CreateProfileDto) {
     const userFound = await this.userRepository.findOne({
@@ -112,7 +133,7 @@ export class UserService {
     // const newProfile = this.profileRepository.create(createProfileDto);
     // const savedProfile = await this.profileRepository.save(newProfile);
     // userFound.profile = savedProfile;
-    
+
     return this.userRepository.save(userFound);
   }
   async getProfiles() {
@@ -122,11 +143,13 @@ export class UserService {
   }
   async login(createUserDto: CreateUserDto) {
     console.log(createUserDto);
-    
+
     const { username, password } = createUserDto;
-    
-    
-    const finduser = await this.userRepository.findOne({ where: { username } , relations : ['rol'] });
+
+    const finduser = await this.userRepository.findOne({
+      where: { username },
+      relations: ['rol'],
+    });
 
     if (!finduser) {
       return new HttpException('El usuario no existe', HttpStatus.NOT_FOUND);
@@ -139,11 +162,11 @@ export class UserService {
     const token = await this.jwtService.sign({
       id: finduser.id,
       username: finduser.username,
-      rol:finduser.rol.nombreRol,
-      nombres:finduser.nombres,
+      rol: finduser.rol.nombreRol,
+      nombres: finduser.nombres,
       apellidoPaterno: finduser.apellidoPaterno,
-      apellidoMaterno:finduser.apellidoMaterno,
-      email:finduser.email,
+      apellidoMaterno: finduser.apellidoMaterno,
+      email: finduser.email,
       telefono: finduser.telefono,
       direccion: finduser.direccion,
       ci: finduser.ci,
@@ -154,7 +177,6 @@ export class UserService {
       token,
     };
 
-    
     return data;
   }
 }

@@ -1,11 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAsignaturaDto } from './dto/create-asignatura.dto';
 import { UpdateAsignaturaDto } from './dto/update-asignatura.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Asignatura } from './entities/asignatura.entity';
+import { Repository } from 'typeorm';
+import { async } from 'rxjs';
 
 @Injectable()
 export class AsignaturaService {
-  create(createAsignaturaDto: CreateAsignaturaDto) {
-    return 'This action adds a new asignatura';
+  constructor(
+    @InjectRepository(Asignatura) private asignaturaService:Repository<Asignatura>
+  ){}
+
+  async create(createAsignaturaDto: CreateAsignaturaDto) {
+    const newAsignatura = await this.asignaturaService.create(createAsignaturaDto)
+    await this.asignaturaService.save(newAsignatura)
+    return newAsignatura;
   }
 
   findAll() {
