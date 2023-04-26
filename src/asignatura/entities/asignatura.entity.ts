@@ -1,5 +1,5 @@
 import { Docente } from 'src/docente/entities/docente.entity';
-import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity({ name: 'asignatura' })
 export class Asignatura {
@@ -33,4 +33,13 @@ export class Asignatura {
   @ManyToOne(()=>Docente, (docente)=> docente.asignatura)
   docente: Docente
 
+  @DeleteDateColumn()
+  deletedAt: Date;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+  
 }

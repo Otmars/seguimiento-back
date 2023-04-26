@@ -1,5 +1,6 @@
 
 import { ConfigModule } from '@nestjs/config';
+import { Asignatura } from 'src/asignatura/entities/asignatura.entity';
 import { Estudiante } from 'src/estudiante/entities/estudiante.entity';
 import { Post } from 'src/post/entities/post.entity';
 import { Profile } from 'src/user/entities/profile.entity';
@@ -16,7 +17,7 @@ const options = {
   username: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
-  entities: [User, Post, Profile,Estudiante],
+  entities: [User, Post, Profile,Estudiante,Asignatura],
   synchronize: true,
   // autoLoadEntities: true
   migrations: [User],

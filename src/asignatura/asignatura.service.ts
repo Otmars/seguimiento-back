@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateAsignaturaDto } from './dto/create-asignatura.dto';
 import { UpdateAsignaturaDto } from './dto/update-asignatura.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,28 +9,58 @@ import { async } from 'rxjs';
 @Injectable()
 export class AsignaturaService {
   constructor(
-    @InjectRepository(Asignatura) private asignaturaService:Repository<Asignatura>
-  ){}
+    @InjectRepository(Asignatura)
+    private asignaturaService: Repository<Asignatura>,
+  ) {}
 
   async create(createAsignaturaDto: CreateAsignaturaDto) {
-    const newAsignatura = await this.asignaturaService.create(createAsignaturaDto)
-    await this.asignaturaService.save(newAsignatura)
+    const newAsignatura = await this.asignaturaService.create(
+      createAsignaturaDto,
+    );
+    console.log(newAsignatura.docente);
+    await this.asignaturaService.save(newAsignatura);
     return newAsignatura;
   }
 
-  findAll() {
-    return `This action returns all asignatura`;
+  async findAll() {
+    const consulta = await this.asignaturaService
+      .createQueryBuilder('asignatura')
+      .select(['asignatura.nombre', 'asignatura.id', 'd.id', 'u.id','u.nombres']) // consulta chida
+      .leftJoin('asignatura.docente', 'd')
+      .leftJoin('d.iduser', 'u')
+      .getMany();
+    console.log(consulta);
+
+    return consulta;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} asignatura`;
+  async findOne(id: number) {
+    const consulta = await this.asignaturaService
+      .createQueryBuilder('asignatura')
+      .select(['asignatura', 'd.id', 'u.id','u.nombres'])
+
+      // .select(['asignatura.nombre', 'asignatura.id', 'd.id', 'u.id','u.nombres'])
+      .where('asignatura.id = :id' ,{id}) // consulta chida
+      .leftJoin('asignatura.docente', 'd')
+      .leftJoin('d.iduser', 'u')
+      .getMany();
+    console.log(consulta);
+
+    return consulta;
   }
 
-  update(id: number, updateAsignaturaDto: UpdateAsignaturaDto) {
-    return `This action updates a #${id} asignatura`;
+  async update(id: number, updateAsignaturaDto: UpdateAsignaturaDto) {
+    const asignaturaFound = await this.asignaturaService.findOne({
+      where:{id},
+    })
+    if (!asignaturaFound) {
+      return new HttpException('Asignatura no existe', HttpStatus.NOT_FOUND);
+    }
+    const updateAsignatura=Object.assign(asignaturaFound,updateAsignaturaDto)
+    return this.asignaturaService.save(updateAsignatura);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} asignatura`;
+    return this.asignaturaService.softRemove({id});
   }
 }

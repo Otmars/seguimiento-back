@@ -30,5 +30,5 @@ export class CreateAsignaturaDto {
   paralelo: string;
 
   @ApiProperty()
-  iddocente: number;
+  docenteId: number;
 }
