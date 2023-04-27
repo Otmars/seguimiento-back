@@ -18,19 +18,27 @@ import { Asignatura } from './asignatura/entities/asignatura.entity';
 import { Roles } from './user/entities/roles.entity';
 import { Estudiante } from './estudiante/entities/estudiante.entity';
 import { Competencia } from './competencia/entities/competencia.entity';
-
+import { AsignaturaToCompetencia } from './asignatura/entities/asignaturaCompetencia.entity';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({isGlobal: true}),
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DATABASE_HOST,
-      port: parseInt( process.env.DATABASE_PORT),
+      port: parseInt(process.env.DATABASE_PORT),
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [User, Docente,Asignatura,Roles,Estudiante,Competencia],
+      entities: [
+        User,
+        Docente,
+        Asignatura,
+        Roles,
+        Estudiante,
+        Competencia,
+        AsignaturaToCompetencia,
+      ],
       synchronize: true,
     }),
     UserModule,
@@ -40,14 +48,13 @@ import { Competencia } from './competencia/entities/competencia.entity';
     EstudianteModule,
     DocenteModule,
     CalificacionModule,
-
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {
-  static port:number
-  constructor(private readonly configService:ConfigService){
-    AppModule.port = +this.configService.get('PORT')
+  static port: number;
+  constructor(private readonly configService: ConfigService) {
+    AppModule.port = +this.configService.get('PORT');
   }
 }

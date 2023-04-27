@@ -1,4 +1,5 @@
 import { Asignatura } from 'src/asignatura/entities/asignatura.entity';
+import { AsignaturaToCompetencia } from 'src/asignatura/entities/asignaturaCompetencia.entity';
 import {
   Column,
   CreateDateColumn,
@@ -6,6 +7,8 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -40,7 +43,9 @@ export class Competencia {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToMany(() => Asignatura,{cascade: true})
-  @JoinTable()
-  asignatura: Asignatura [];
+  @OneToMany(
+    () => AsignaturaToCompetencia,
+    (asignaturaCompetencia) => asignaturaCompetencia.competencia,
+  )
+  asignaturaCompetencia: AsignaturaToCompetencia[];
 }

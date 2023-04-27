@@ -3,6 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { CompetenciaService } from './competencia.service';
 import { CreateCompetenciaDto } from './dto/create-competencia.dto';
 import { UpdateCompetenciaDto } from './dto/update-competencia.dto';
+import { competenciaAsignatura } from './dto/competencia-asignatura.dto';
 
 @ApiTags('competencia')
 @Controller('competencia')
@@ -13,7 +14,10 @@ export class CompetenciaController {
   create(@Body() createCompetenciaDto: CreateCompetenciaDto) {
     return this.competenciaService.create(createCompetenciaDto);
   }
-
+  @Post('/asicom')
+  addcompetenciaAsinatura(@Body() competenciaAsignaturaDto : competenciaAsignatura ){
+    return this.competenciaService.addCompetenciaAsignatura(competenciaAsignaturaDto.competenciaId,competenciaAsignaturaDto.asignaturaId)
+  }
   @Get()
   findAll() {
     return this.competenciaService.findAll();
