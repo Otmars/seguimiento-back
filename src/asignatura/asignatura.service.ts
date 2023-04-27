@@ -17,7 +17,6 @@ export class AsignaturaService {
     const newAsignatura = await this.asignaturaService.create(
       createAsignaturaDto,
     );
-    console.log(newAsignatura.docente);
     await this.asignaturaService.save(newAsignatura);
     return newAsignatura;
   }
@@ -25,7 +24,13 @@ export class AsignaturaService {
   async findAll() {
     const consulta = await this.asignaturaService
       .createQueryBuilder('asignatura')
-      .select(['asignatura.nombre', 'asignatura.id', 'd.id', 'u.id','u.nombres']) // consulta chida
+      .select([
+        'asignatura.nombre',
+        'asignatura.id',
+        'd.id',
+        'u.id',
+        'u.nombres',
+      ]) // consulta chida
       .leftJoin('asignatura.docente', 'd')
       .leftJoin('d.iduser', 'u')
       .getMany();
@@ -37,10 +42,10 @@ export class AsignaturaService {
   async findOne(id: number) {
     const consulta = await this.asignaturaService
       .createQueryBuilder('asignatura')
-      .select(['asignatura', 'd.id', 'u.id','u.nombres'])
+      .select(['asignatura', 'd.id', 'u.id', 'u.nombres'])
 
       // .select(['asignatura.nombre', 'asignatura.id', 'd.id', 'u.id','u.nombres'])
-      .where('asignatura.id = :id' ,{id}) // consulta chida
+      .where('asignatura.id = :id', { id }) // consulta chida
       .leftJoin('asignatura.docente', 'd')
       .leftJoin('d.iduser', 'u')
       .getMany();
@@ -51,16 +56,19 @@ export class AsignaturaService {
 
   async update(id: number, updateAsignaturaDto: UpdateAsignaturaDto) {
     const asignaturaFound = await this.asignaturaService.findOne({
-      where:{id},
-    })
+      where: { id },
+    });
     if (!asignaturaFound) {
       return new HttpException('Asignatura no existe', HttpStatus.NOT_FOUND);
     }
-    const updateAsignatura=Object.assign(asignaturaFound,updateAsignaturaDto)
+    const updateAsignatura = Object.assign(
+      asignaturaFound,
+      updateAsignaturaDto,
+    );
     return this.asignaturaService.save(updateAsignatura);
   }
 
   remove(id: number) {
-    return this.asignaturaService.softRemove({id});
+    return this.asignaturaService.softRemove({ id });
   }
 }

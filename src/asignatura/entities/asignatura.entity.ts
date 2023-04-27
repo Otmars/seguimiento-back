@@ -1,5 +1,6 @@
+import { Competencia } from 'src/competencia/entities/competencia.entity';
 import { Docente } from 'src/docente/entities/docente.entity';
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity({ name: 'asignatura' })
 export class Asignatura {
@@ -42,4 +43,6 @@ export class Asignatura {
   @UpdateDateColumn()
   updatedAt: Date;
   
+  @ManyToMany(() => Competencia,{cascade: true,})
+  competencia: Competencia [];
 }

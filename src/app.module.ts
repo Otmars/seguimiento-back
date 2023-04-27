@@ -17,6 +17,7 @@ import { Docente } from './docente/entities/docente.entity';
 import { Asignatura } from './asignatura/entities/asignatura.entity';
 import { Roles } from './user/entities/roles.entity';
 import { Estudiante } from './estudiante/entities/estudiante.entity';
+import { Competencia } from './competencia/entities/competencia.entity';
 
 
 @Module({
@@ -29,7 +30,7 @@ import { Estudiante } from './estudiante/entities/estudiante.entity';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [User, Docente,Asignatura,Roles,Estudiante],
+      entities: [User, Docente,Asignatura,Roles,Estudiante,Competencia],
       synchronize: true,
     }),
     UserModule,
