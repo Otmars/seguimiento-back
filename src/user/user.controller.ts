@@ -15,6 +15,7 @@ import { User } from './entities/user.entity';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { JwtAuthGuard } from './guardjwt';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @ApiTags('user')
 @ApiBearerAuth()
@@ -29,8 +30,8 @@ export class UserController {
 
   
   @Post('/login')
-  login(@Body() createUserDto: CreateUserDto ){
-    return this.userService.login(createUserDto);
+  login(@Body() loginUserDto: LoginUserDto ){
+    return this.userService.login(loginUserDto);
   }
   
   @Post()

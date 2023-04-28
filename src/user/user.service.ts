@@ -11,6 +11,7 @@ import { JwtService } from '@nestjs/jwt/dist';
 import { Docente } from 'src/docente/entities/docente.entity';
 import { Estudiante } from 'src/estudiante/entities/estudiante.entity';
 import { Roles } from './entities/roles.entity';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @Injectable()
 export class UserService {
@@ -146,16 +147,18 @@ export class UserService {
       relations: ['user'],
     });
   }
-  async login(createUserDto: CreateUserDto) {
-    console.log(createUserDto);
+  async login(loginUserDto: LoginUserDto) {
 
-    const { username, password } = createUserDto;
 
+    const { username, password } = loginUserDto;
+    // console.log(username);
+    
     const finduser = await this.userRepository.findOne({
       where: { username },
       relations: ['rol'],
     });
-
+    // console.log(finduser);
+    
     if (!finduser) {
       return new HttpException('El usuario no existe', HttpStatus.NOT_FOUND);
     }
