@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, PrimaryGeneratedColumn, DeleteDateColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Asignatura } from './asignatura.entity';
 import { Competencia } from 'src/competencia/entities/competencia.entity';
 
@@ -12,7 +12,16 @@ export class AsignaturaToCompetencia {
 
   @Column()
   competenciaId: number;
+  
+  @DeleteDateColumn()
+  deletedAt: Date;
 
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+  
   @ManyToOne(() => Asignatura, (asignatura) => asignatura.asignaturaCompetencia)
   asignatura: Asignatura;
 

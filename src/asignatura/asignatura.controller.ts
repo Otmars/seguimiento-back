@@ -1,8 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AsignaturaService } from './asignatura.service';
 import { CreateAsignaturaDto } from './dto/create-asignatura.dto';
 import { UpdateAsignaturaDto } from './dto/update-asignatura.dto';
+import { competenciaAsignatura } from './dto/competencia-asignatura.dto';
 
 @ApiTags('asignatura')
 @Controller('asignatura')
@@ -12,6 +21,11 @@ export class AsignaturaController {
   @Post()
   create(@Body() createAsignaturaDto: CreateAsignaturaDto) {
     return this.asignaturaService.create(createAsignaturaDto);
+  }
+
+  @Post('/asicom')
+  asignaturaToCompetencia(@Body() createAsignaturaDto: competenciaAsignatura) {
+    return this.asignaturaService.asignaturaToCompetencia(createAsignaturaDto);
   }
 
   @Get()
@@ -25,7 +39,10 @@ export class AsignaturaController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAsignaturaDto: UpdateAsignaturaDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateAsignaturaDto: UpdateAsignaturaDto,
+  ) {
     return this.asignaturaService.update(+id, updateAsignaturaDto);
   }
 

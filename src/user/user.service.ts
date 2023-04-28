@@ -10,6 +10,7 @@ import { compare, hash } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt/dist';
 import { Docente } from 'src/docente/entities/docente.entity';
 import { Estudiante } from 'src/estudiante/entities/estudiante.entity';
+import { Roles } from './entities/roles.entity';
 
 @Injectable()
 export class UserService {
@@ -37,7 +38,7 @@ export class UserService {
     const { nombres } = createUserDto;
     const primernombre = nombres.split(' ');
     const { ci } = createUserDto;
-    const { role } = createUserDto;
+    const { rol } = createUserDto;
     createUserDto = { ...createUserDto, username: primernombre[0] + '_' + ci };
     const userFound = await this.userRepository.findOne({
       where: {
@@ -61,11 +62,15 @@ export class UserService {
 
     // if (roles.toString() == 'docente') {
     // }
-
-    if(createUserDto.role == 1){
+    
+  // console.log(JSON.stringify(savedUser.rol) == "1");
+    
+    if(JSON.stringify(savedUser.rol) == "1"){
+      console.log("entra");
+      
       this.docenteRepository.save(id)
     }
-    if(createUserDto.role == 3){
+    if(JSON.stringify(savedUser.rol) == "3"){
       this.estudianteRepository.save(datosEstudiante)
     }
     // }

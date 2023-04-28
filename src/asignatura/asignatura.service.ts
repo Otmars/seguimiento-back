@@ -5,12 +5,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Asignatura } from './entities/asignatura.entity';
 import { Repository } from 'typeorm';
 import { async } from 'rxjs';
+import { AsignaturaToCompetencia } from './entities/asignaturaCompetencia.entity';
+import { competenciaAsignatura } from './dto/competencia-asignatura.dto';
 
 @Injectable()
 export class AsignaturaService {
   constructor(
     @InjectRepository(Asignatura)
     private asignaturaService: Repository<Asignatura>,
+    @InjectRepository(AsignaturaToCompetencia)
+    private asiToComService: Repository<AsignaturaToCompetencia>,
   ) {}
 
   async create(createAsignaturaDto: CreateAsignaturaDto) {
@@ -19,6 +23,16 @@ export class AsignaturaService {
     );
     await this.asignaturaService.save(newAsignatura);
     return newAsignatura;
+  }
+
+  async asignaturaToCompetencia(body: competenciaAsignatura) {
+
+    const foundrelation = await this.asiToComService.count({where:[body]})
+    if (foundrelation) {
+      return new HttpException('La relacion ya existe', HttpStatus.CONFLICT);
+    }
+    const newRelation = this.asiToComService.create(body);
+    return this.asiToComService.save(newRelation);
   }
 
   async findAll() {

@@ -20,8 +20,6 @@ export class User {
   @ManyToOne(() => Roles, (user)=> user.nombreRol )
   rol: Roles
 
-
-
   @Column('varchar')
   nombres: string;
 
