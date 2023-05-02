@@ -39,8 +39,7 @@ export class AsignaturaService {
     const consulta = await this.asignaturaService
       .createQueryBuilder('asignatura')
       .select([
-        'asignatura.nombre',
-        'asignatura.id',
+        'asignatura',
         'd.id',
         'u.id',
         'u.nombres',
@@ -48,8 +47,6 @@ export class AsignaturaService {
       .leftJoin('asignatura.docente', 'd')
       .leftJoin('d.iduser', 'u')
       .getMany();
-    console.log(consulta);
-
     return consulta;
   }
 
