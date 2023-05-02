@@ -8,7 +8,10 @@ import { UpdateDocenteDto } from './dto/update-docente.dto';
 @Controller('docente')
 export class DocenteController {
   constructor(private readonly docenteService: DocenteService) {}
-
+  @Get('/nombre')
+  findAllNombre() {
+    return this.docenteService.findAllNombre();
+  }
   @Post()
   async create(@Body() createDocenteDto: CreateDocenteDto) {
     try {
@@ -32,6 +35,8 @@ export class DocenteController {
   findOne(@Param('id') id: string) {
     return this.docenteService.findOne(+id);
   }
+
+  
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateDocenteDto: UpdateDocenteDto) {

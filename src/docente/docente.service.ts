@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateDocenteDto } from './dto/create-docente.dto';
+import { CreateDocenteDto,Docentenom } from './dto/create-docente.dto';
 import { UpdateDocenteDto } from './dto/update-docente.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Docente } from './entities/docente.entity';
@@ -16,21 +16,6 @@ export class DocenteService {
       ) {}
 
   async create(createDocenteDto: CreateDocenteDto) {
-    const newdocente = createDocenteDto
-
-    // console.log(createDocenteDto);
-    // const { iduser } = createDocenteDto;
-    // const userFound = await this.userRepository.findOne({
-    //   where: {
-    //     id: iduser,
-    //   },
-    // });
-    // if (!userFound) {
-    //   return new HttpException('Usuario no existe', HttpStatus.CONFLICT); //throw en lugar del return
-    // }
-    // const newDocente = this.docenteRepository.create(createDocenteDto);
-    // return this.docenteRepository.save(newDocente);
-    // this.userService.create(newdocente)  
   }
 
   async findAll() {
@@ -38,7 +23,25 @@ export class DocenteService {
       relations: ['iduser'],
     });
   }
-
+  async findAllNombre(){
+    
+    var docenteNombre:Docentenom[]=[]
+    const consulta= await this.docenteRepository.createQueryBuilder('docente')
+    .select([
+      'd.id',
+      'd.nombres',
+      'd.apellidoPaterno',
+      'd.apellidoMaterno'
+    ]) // consulta chida
+    .leftJoin('docente.iduser', 'd')
+    .getRawMany();
+    for (let i = 0; i < Object.values(consulta).length; i++) {
+      const element = Object.values(consulta)[i]['d_nombres']+" "+Object.values(consulta)[i]['d_apellidoPaterno']+" "+Object.values(consulta)[i]['d_apellidoMaterno'];
+      const dato:Docentenom = {id:Object.values(consulta)[i]['d_id'],nombre:element}
+      docenteNombre.push(dato)
+    }
+    return docenteNombre
+  }
   async findOne(id: number) {
     return await this.docenteRepository.find({
       where: { id },
