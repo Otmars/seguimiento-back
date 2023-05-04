@@ -9,22 +9,19 @@ export class CreateAsignaturaDto {
   nombre: string;
 
   @ApiProperty()
-  ciclo: string;
-
-  @ApiProperty()
   siglaCodigo: string;
 
   @ApiProperty()
-  cargaHoraria: string;
+  cargaHoraria: number;
 
-  @ApiProperty()
-  RegNivelEst: string;
+  // @ApiProperty()
+  // RegNivelEst: string;
 
   @ApiProperty()
   nMeses: number;
 
-  @ApiProperty()
-  prerequisito: string;
+  // @ApiProperty()
+  // prerequisito: string;
 
   @ApiProperty()
   paralelo: string;

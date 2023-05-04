@@ -13,9 +13,9 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 export enum TipoCompentecia {
-  MACRO = 'macro',
-  GENERICAS = 'generica',
-  ESPECIFICAS = 'especifica',
+  MACRO = 'Macro Competencia',
+  GENERICAS = 'Competencia Generica',
+  ESPECIFICAS = 'Competencia Especifica',
 }
 
 @Entity('competencia')

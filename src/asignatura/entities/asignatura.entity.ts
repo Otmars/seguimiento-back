@@ -11,23 +11,21 @@ export class Asignatura {
   @Column()
   nombre: string;
 
-  @Column()
-  ciclo: string;
 
   @Column()
   siglaCodigo: string;
 
   @Column()
-  cargaHoraria: string;
+  cargaHoraria: number;
 
-  @Column()
-  RegNivelEst: string;
+  // @Column()
+  // RegNivelEst: string;
 
   @Column()
   nMeses: number;
 
-  @Column({default:"ninguno"})
-  prerequisito: string;
+  // @Column({default:"ninguno"})
+  // prerequisito: string;
 
   @Column()
   paralelo:string;

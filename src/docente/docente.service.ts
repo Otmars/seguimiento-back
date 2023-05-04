@@ -28,7 +28,7 @@ export class DocenteService {
     var docenteNombre:Docentenom[]=[]
     const consulta= await this.docenteRepository.createQueryBuilder('docente')
     .select([
-      'd.id',
+      'docente.id',
       'd.nombres',
       'd.apellidoPaterno',
       'd.apellidoMaterno'
@@ -37,7 +37,7 @@ export class DocenteService {
     .getRawMany();
     for (let i = 0; i < Object.values(consulta).length; i++) {
       const element = Object.values(consulta)[i]['d_nombres']+" "+Object.values(consulta)[i]['d_apellidoPaterno']+" "+Object.values(consulta)[i]['d_apellidoMaterno'];
-      const dato:Docentenom = {id:Object.values(consulta)[i]['d_id'],nombre:element}
+      const dato:Docentenom = {id:Object.values(consulta)[i]['docente_id'],nombre:element}
       docenteNombre.push(dato)
     }
     return docenteNombre

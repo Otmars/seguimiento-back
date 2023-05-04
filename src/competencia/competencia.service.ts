@@ -49,7 +49,7 @@ export class CompetenciaService {
   }
 
   findAll() {
-    return this.competenciaService.find({relations:['asignatura']});
+    return this.competenciaService.find();
   }
 
   findOne(id: number) {
