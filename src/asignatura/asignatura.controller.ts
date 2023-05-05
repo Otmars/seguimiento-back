@@ -28,6 +28,11 @@ export class AsignaturaController {
     return this.asignaturaService.asignaturaToCompetencia(createAsignaturaDto);
   }
 
+  @Get('/docasi/:id')
+  asignaturaToDocente(@Param('id') id: string){
+    return this.asignaturaService.findAsignaturaDocenteOne(id)
+  }
+
   @Get()
   findAll() {
     return this.asignaturaService.findAll();

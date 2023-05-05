@@ -26,8 +26,7 @@ export class AsignaturaService {
   }
 
   async asignaturaToCompetencia(body: competenciaAsignatura) {
-
-    const foundrelation = await this.asiToComService.count({where:[body]})
+    const foundrelation = await this.asiToComService.count({ where: [body] });
     if (foundrelation) {
       return new HttpException('La relacion ya existe', HttpStatus.CONFLICT);
     }
@@ -38,12 +37,7 @@ export class AsignaturaService {
   async findAll() {
     const consulta = await this.asignaturaService
       .createQueryBuilder('asignatura')
-      .select([
-        'asignatura',
-        'd.id',
-        'u.id',
-        'u.nombres',
-      ]) // consulta chida
+      .select(['asignatura', 'd.id', 'u.id', 'u.nombres']) // consulta chida
       .leftJoin('asignatura.docente', 'd')
       .leftJoin('d.iduser', 'u')
       .getMany();
@@ -81,5 +75,15 @@ export class AsignaturaService {
 
   remove(id: number) {
     return this.asignaturaService.softRemove({ id });
+  }
+  async findAsignaturaDocenteOne(id: string) {
+    const consulta = await this.asignaturaService
+      .createQueryBuilder('asignatura')
+      .where('u.id = :id', { id }) // consulta chida
+      .leftJoin('asignatura.docente', 'd')
+      .leftJoin('d.iduser', 'u')
+      .getMany();
+
+    return consulta;
   }
 }

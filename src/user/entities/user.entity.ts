@@ -1,5 +1,5 @@
 import { Post } from "src/post/entities/post.entity";
-import { Entity,Column,PrimaryGeneratedColumn, JoinColumn,OneToOne, OneToMany, ManyToOne } from "typeorm";
+import { Entity,Column,PrimaryGeneratedColumn, JoinColumn,OneToOne, OneToMany, ManyToOne, DeleteDateColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { Roles } from "./roles.entity";
 
 @Entity({name: 'user'})
@@ -47,9 +47,14 @@ export class User {
   @Column({ type: 'date' })
   fnacimiento: string;
 
-  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
-  createAt: Date;
+  @DeleteDateColumn()
+  deletedAt: Date;
 
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
   // @OneToOne(() => Profile)
   // @JoinColumn()
   // profile: Profile;

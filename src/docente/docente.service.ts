@@ -49,11 +49,4 @@ export class DocenteService {
     });
   }
 
-  update(id: number, updateDocenteDto: UpdateDocenteDto) {
-    return `This action updates a #${id} docente`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} docente`;
-  }
 }

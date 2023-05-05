@@ -21,10 +21,8 @@ export class UserService {
     @InjectRepository(Docente) private docenteRepository: Repository<Docente>,
     @InjectRepository(Estudiante)
     private estudianteRepository: Repository<Estudiante>,
-    private jwtService: JwtService,
-  ) // @InjectRepository(Docente) private docenteRepository: Repository<Docente>,
-
-  {}
+    private jwtService: JwtService, // @InjectRepository(Docente) private docenteRepository: Repository<Docente>,
+  ) {}
   async create(createUserDto: CreateUserDto) {
     const { fnacimiento } = createUserDto;
     const datofecha = fnacimiento.split('-');
@@ -56,23 +54,22 @@ export class UserService {
     // this.docenteRepository.save({user: newUser.id})
     const datosEstudiante = {
       ru: createUserDto.ru,
-      iduser:savedUser.id
+      iduser: savedUser.id,
     };
     const id = { iduser: savedUser.id };
 
-
     // if (roles.toString() == 'docente') {
     // }
-    
-  // console.log(JSON.stringify(savedUser.rol) == "1");
-    
-    if(JSON.stringify(savedUser.rol) == "1"){
-      console.log("entra");
-      
-      this.docenteRepository.save(id)
+
+    // console.log(JSON.stringify(savedUser.rol) == "1");
+
+    if (JSON.stringify(savedUser.rol) == '1') {
+      console.log('entra');
+
+      this.docenteRepository.save(id);
     }
-    if(JSON.stringify(savedUser.rol) == "3"){
-      this.estudianteRepository.save(datosEstudiante)
+    if (JSON.stringify(savedUser.rol) == '3') {
+      this.estudianteRepository.save(datosEstudiante);
     }
     // }
     // if (savedUser.rol.nombreRol == "estudiante") {
@@ -148,17 +145,15 @@ export class UserService {
     });
   }
   async login(loginUserDto: LoginUserDto) {
-
-
     const { username, password } = loginUserDto;
     // console.log(username);
-    
+
     const finduser = await this.userRepository.findOne({
       where: { username },
       relations: ['rol'],
     });
     // console.log(finduser);
-    
+
     if (!finduser) {
       return new HttpException('El usuario no existe', HttpStatus.NOT_FOUND);
     }

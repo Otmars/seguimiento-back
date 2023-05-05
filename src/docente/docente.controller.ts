@@ -35,16 +35,4 @@ export class DocenteController {
   findOne(@Param('id') id: string) {
     return this.docenteService.findOne(+id);
   }
-
-  
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDocenteDto: UpdateDocenteDto) {
-    return this.docenteService.update(+id, updateDocenteDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.docenteService.remove(+id);
-  }
 }
