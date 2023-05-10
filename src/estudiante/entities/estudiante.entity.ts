@@ -1,5 +1,6 @@
 import { User } from "src/user/entities/user.entity";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Inscripciones } from "./inscripcionesEstudiante.entity";
 
 @Entity({name:'estudiante'})
 export class Estudiante {
@@ -14,4 +15,7 @@ export class Estudiante {
     @OneToOne(()=>User,{ onDelete : 'CASCADE'})
     @JoinColumn()
     iduser:string
+
+    @OneToMany(() => Inscripciones, (inscripcion) => inscripcion.estudiante)
+  inscripcion: Inscripciones [];
 }

@@ -19,6 +19,7 @@ import { Roles } from './user/entities/roles.entity';
 import { Estudiante } from './estudiante/entities/estudiante.entity';
 import { Competencia } from './competencia/entities/competencia.entity';
 import { AsignaturaToCompetencia } from './asignatura/entities/asignaturaCompetencia.entity';
+import { Inscripciones } from './estudiante/entities/inscripcionesEstudiante.entity';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { AsignaturaToCompetencia } from './asignatura/entities/asignaturaCompete
         Estudiante,
         Competencia,
         AsignaturaToCompetencia,
+        Inscripciones
       ],
       synchronize: true,
     }),

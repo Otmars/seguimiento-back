@@ -34,6 +34,13 @@ export class AsignaturaService {
     return this.asiToComService.save(newRelation);
   }
 
+  async getasignaturaToCompetencia(id: number) {
+    return await this.asiToComService.find({
+      where: { asignaturaId:id },
+      // relations: ['asignatura','competencia'],
+    });
+  }
+
   async findAll() {
     const consulta = await this.asignaturaService
       .createQueryBuilder('asignatura')
