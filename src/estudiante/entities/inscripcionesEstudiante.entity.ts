@@ -14,6 +14,9 @@ export class Inscripciones {
 
   @Column()
   estudianteId: number;
+
+  @Column()
+  gestion: number;
   
   @DeleteDateColumn()
   deletedAt: Date;
