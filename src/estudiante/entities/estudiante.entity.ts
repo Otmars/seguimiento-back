@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Inscripciones } from './inscripcionesEstudiante.entity';
+import { CompetenciaEstudiante } from './competenciasEstudiante.entity';
 
 @Entity({ name: 'estudiante' })
 export class Estudiante {
@@ -27,4 +28,10 @@ export class Estudiante {
     onDelete: 'CASCADE',
   })
   inscripcion: Inscripciones[];
+
+  @OneToMany(() => CompetenciaEstudiante, (competenciaEstudiante) => competenciaEstudiante.estudiante, {
+    onDelete: 'CASCADE',
+  })
+  competencia: CompetenciaEstudiante[];
 }
+

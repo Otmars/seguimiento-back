@@ -41,6 +41,7 @@ export class AsignaturaService {
     return await this.asiToComService.find({
       where: { asignaturaId: id },
       // relations: ['asignatura','competencia'],
+      relations: ['competencia'],
     });
   }
 

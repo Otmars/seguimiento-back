@@ -22,6 +22,7 @@ export class EstudianteController {
     return this.estudianteService.retirarMateria(+id);
   }
 
+  
   @Get()
   findAll() {
     return this.estudianteService.findAll();

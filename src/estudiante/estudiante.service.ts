@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Estudiante } from './entities/estudiante.entity';
 import { Repository } from 'typeorm';
 import { Inscripciones } from './entities/inscripcionesEstudiante.entity';
+import { AsignaturaToCompetencia } from 'src/asignatura/entities/asignaturaCompetencia.entity';
 
 @Injectable()
 export class EstudianteService {
@@ -16,6 +17,7 @@ export class EstudianteService {
     private estudianteRepository: Repository<Estudiante>,
     @InjectRepository(Inscripciones)
     private inscripcionRepository: Repository<Inscripciones>,
+
   ) {}
 
   async inscribir(inscripcion: InscripcionDto) {
@@ -78,4 +80,5 @@ export class EstudianteService {
   remove(id: number) {
     return `This action removes a #${id} estudiante`;
   }
+
 }
