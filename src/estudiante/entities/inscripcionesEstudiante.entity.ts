@@ -7,7 +7,7 @@ import { Estudiante } from './estudiante.entity';
 @Entity()
 export class Inscripciones {
   @PrimaryGeneratedColumn()
-  Id: number;
+  id: number;
 
   @Column()
   asignaturaId: number;
@@ -30,6 +30,6 @@ export class Inscripciones {
   @ManyToOne(() => Asignatura, (asignatura) => asignatura.asignaturaCompetencia)
   asignatura: Asignatura;
 
-  @ManyToOne(() => Estudiante, (estudiante) => estudiante.inscripcion)
+  @ManyToOne(() => Estudiante, (estudiante) => estudiante.inscripcion,{onDelete:'CASCADE'})
   estudiante: Estudiante;
 }

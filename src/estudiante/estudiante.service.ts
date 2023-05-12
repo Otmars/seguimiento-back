@@ -45,11 +45,16 @@ export class EstudianteService {
     // return consulta;
     const consulta = await this.estudianteRepository
       .createQueryBuilder('estudiante')
-      .select(['estudiante', 'i','a' ,'u']) // consulta chida
+      .select(['estudiante', 'i', 'a', 'u']) // consulta chida
+      .where('i.asignatura IS NOT NULL')
       .leftJoin('estudiante.iduser', 'u')
       .leftJoin('estudiante.inscripcion', 'i')
       .leftJoin('i.asignatura', 'a')
       .getMany();
+    return consulta;
+  }
+  async retirarMateria(id:number) {
+    const consulta = await this.inscripcionRepository.softDelete({id});
     return consulta;
   }
 

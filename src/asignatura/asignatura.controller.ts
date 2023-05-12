@@ -33,6 +33,11 @@ export class AsignaturaController {
     
     return this.asignaturaService.getasignaturaToCompetencia(+id);
   }
+  @Get('/inscritos/:id')
+  incritos(@Param('id') id: string) {
+
+    return this.asignaturaService.inscritosAsignatura(+id);
+  }
 
   @Get('/docasi/:id')
   asignaturaToDocente(@Param('id') id: string){

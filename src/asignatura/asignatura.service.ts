@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { async } from 'rxjs';
 import { AsignaturaToCompetencia } from './entities/asignaturaCompetencia.entity';
 import { competenciaAsignatura } from './dto/competencia-asignatura.dto';
+import { Inscripciones } from 'src/estudiante/entities/inscripcionesEstudiante.entity';
 
 @Injectable()
 export class AsignaturaService {
@@ -15,6 +16,8 @@ export class AsignaturaService {
     private asignaturaService: Repository<Asignatura>,
     @InjectRepository(AsignaturaToCompetencia)
     private asiToComService: Repository<AsignaturaToCompetencia>,
+    @InjectRepository(Inscripciones)
+    private inscripcionService: Repository<Inscripciones>,
   ) {}
 
   async create(createAsignaturaDto: CreateAsignaturaDto) {
@@ -36,7 +39,7 @@ export class AsignaturaService {
 
   async getasignaturaToCompetencia(id: number) {
     return await this.asiToComService.find({
-      where: { asignaturaId:id },
+      where: { asignaturaId: id },
       // relations: ['asignatura','competencia'],
     });
   }
@@ -91,6 +94,19 @@ export class AsignaturaService {
       .leftJoin('d.iduser', 'u')
       .getMany();
 
+    return consulta;
+  }
+
+  async inscritosAsignatura(id: number) {
+    // const consulta = await this.inscripcionService.find({where:{asignaturaId:id},relations:['estudiante']})
+    const consulta = await this.inscripcionService
+      .createQueryBuilder('inscripcion')
+      .select(['inscripcion', 'e.id', 'u.id', 'u.nombres','u.apellidoPaterno','u.apellidoMaterno','u.ci','u.email' , 'a']) // consulta chida
+      .where({asignaturaId:id})
+      .innerJoin('inscripcion.asignatura', 'a')
+      .innerJoin('inscripcion.estudiante', 'e')
+      .innerJoin('e.iduser', 'u')
+      .getMany();
     return consulta;
   }
 }
