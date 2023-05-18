@@ -56,17 +56,18 @@ export class AsignaturaService {
   }
 
   async findOne(id: number) {
+    const asignaturaFound = await this.asignaturaService.findOne({where:{id}})
+    if(!asignaturaFound){
+      throw new HttpException('Asignatura no existe',HttpStatus.NOT_FOUND)
+    }
     const consulta = await this.asignaturaService
       .createQueryBuilder('asignatura')
       .select(['asignatura', 'd.id', 'u.id', 'u.nombres'])
-
       // .select(['asignatura.nombre', 'asignatura.id', 'd.id', 'u.id','u.nombres'])
       .where('asignatura.id = :id', { id }) // consulta chida
       .leftJoin('asignatura.docente', 'd')
       .leftJoin('d.iduser', 'u')
       .getMany();
-    console.log(consulta);
-
     return consulta;
   }
 

@@ -21,6 +21,8 @@ import { Competencia } from './competencia/entities/competencia.entity';
 import { AsignaturaToCompetencia } from './asignatura/entities/asignaturaCompetencia.entity';
 import { Inscripciones } from './estudiante/entities/inscripcionesEstudiante.entity';
 import { CompetenciaEstudiante } from './estudiante/entities/competenciasEstudiante.entity';
+import { Calificacion } from './calificacion/entities/calificacion.entity';
+import { CalificacionEstudiante } from './calificacion/entities/calificacionEstudiante.entity';
 
 @Module({
   imports: [
@@ -41,7 +43,9 @@ import { CompetenciaEstudiante } from './estudiante/entities/competenciasEstudia
         Competencia,
         AsignaturaToCompetencia,
         Inscripciones,
-        CompetenciaEstudiante
+        CompetenciaEstudiante,
+        Calificacion,
+        CalificacionEstudiante
       ],
       synchronize: true,
     }),

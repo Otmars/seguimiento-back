@@ -19,9 +19,18 @@ export class CalificacionController {
     return this.calificacionService.findAll();
   }
 
+  @Get('/parciales/:id')
+  findParciales(@Param('id') id: string) {
+    return this.calificacionService.findParciales(+id);
+  }
+  @Get('/practicas/:id')
+  findPracticas(@Param('id') id: string) {
+    return this.calificacionService.findPracticas(+id);
+  }
+
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.calificacionService.findOne(+id);
+  findCalificacionesAsignatura(@Param('id') id: string) {
+    return this.calificacionService.findCalificacionesAsignatura(+id);
   }
 
   @Patch(':id')

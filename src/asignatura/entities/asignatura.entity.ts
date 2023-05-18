@@ -2,6 +2,7 @@ import { Competencia } from 'src/competencia/entities/competencia.entity';
 import { Docente } from 'src/docente/entities/docente.entity';
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { AsignaturaToCompetencia } from './asignaturaCompetencia.entity';
+import { Calificacion } from 'src/calificacion/entities/calificacion.entity';
 
 @Entity({ name: 'asignatura' })
 export class Asignatura {
@@ -44,4 +45,8 @@ export class Asignatura {
   
   @OneToMany(() => AsignaturaToCompetencia, (asignaturaCompetencia) => asignaturaCompetencia.asignatura)
   asignaturaCompetencia: AsignaturaToCompetencia [];
+
+  @OneToMany(() => Calificacion, (calificacion) => calificacion.asignatura)
+  calificaion: Calificacion[]
 }
+

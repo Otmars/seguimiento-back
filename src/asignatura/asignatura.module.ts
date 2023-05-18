@@ -9,6 +9,7 @@ import { Inscripciones } from 'src/estudiante/entities/inscripcionesEstudiante.e
 @Module({
   imports: [TypeOrmModule.forFeature([Asignatura,AsignaturaToCompetencia,Inscripciones])],
   controllers: [AsignaturaController],
-  providers: [AsignaturaService]
+  providers: [AsignaturaService],
+  exports:[AsignaturaService]
 })
 export class AsignaturaModule {}

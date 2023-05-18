@@ -9,6 +9,8 @@ import {
 } from 'typeorm';
 import { Inscripciones } from './inscripcionesEstudiante.entity';
 import { CompetenciaEstudiante } from './competenciasEstudiante.entity';
+import { Calificacion } from 'src/calificacion/entities/calificacion.entity';
+import { CalificacionEstudiante } from 'src/calificacion/entities/calificacionEstudiante.entity';
 
 @Entity({ name: 'estudiante' })
 export class Estudiante {
@@ -33,5 +35,8 @@ export class Estudiante {
     onDelete: 'CASCADE',
   })
   competencia: CompetenciaEstudiante[];
+
+  @OneToMany(() => CalificacionEstudiante, (calificacionestudiante) => calificacionestudiante.estudiante)
+  calificacion: CalificacionEstudiante [];
 }
 
