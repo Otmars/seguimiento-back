@@ -6,3 +6,11 @@ export class InscripcionDto {
     estudianteId: number;
     gestion: number;
 }
+
+export class registrarCompetenciaDto {
+
+    competenciaId: number;
+    estudianteId: number;
+
+}
+

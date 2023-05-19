@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { EstudianteService } from './estudiante.service';
-import { CreateEstudianteDto, InscripcionDto } from './dto/create-estudiante.dto';
+import { CreateEstudianteDto, InscripcionDto, registrarCompetenciaDto } from './dto/create-estudiante.dto';
 import { UpdateEstudianteDto } from './dto/update-estudiante.dto';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -13,6 +13,12 @@ export class EstudianteController {
   incripcion(@Body() createEstudianteDto: InscripcionDto) {
     return this.estudianteService.inscribir(createEstudianteDto);
   }
+
+  @Post('/competencia')
+  registrarCompetencia(@Body() body: registrarCompetenciaDto) {
+    return this.estudianteService.createCompetenciaEstudiante(body);
+  }
+
   @Get('/inscripcion')
   inscribidos() {
     return this.estudianteService.getinscripciones();
@@ -21,6 +27,11 @@ export class EstudianteController {
   @Get('/inscripcion/:id')
   estudianteinscrito(@Param('id') id :string ) {
     return this.estudianteService.getinscripcion(+id);
+  }
+
+  @Get('/competencia/:id')
+  getComptenciaEstudiante(@Param('id') id :string ) {
+    return this.estudianteService.getCompetenciaEstudiante(+id);
   }
 
 

@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import {
   CreateEstudianteDto,
   InscripcionDto,
+  registrarCompetenciaDto,
 } from './dto/create-estudiante.dto';
 import { UpdateEstudianteDto } from './dto/update-estudiante.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,6 +10,7 @@ import { Estudiante } from './entities/estudiante.entity';
 import { Repository } from 'typeorm';
 import { Inscripciones } from './entities/inscripcionesEstudiante.entity';
 import { AsignaturaToCompetencia } from 'src/asignatura/entities/asignaturaCompetencia.entity';
+import { CompetenciaEstudiante } from './entities/competenciasEstudiante.entity';
 
 @Injectable()
 export class EstudianteService {
@@ -17,6 +19,8 @@ export class EstudianteService {
     private estudianteRepository: Repository<Estudiante>,
     @InjectRepository(Inscripciones)
     private inscripcionRepository: Repository<Inscripciones>,
+    @InjectRepository(CompetenciaEstudiante)
+    private competendiaEstudianteRepository: Repository<CompetenciaEstudiante>,
   ) {}
 
   async inscribir(inscripcion: InscripcionDto) {
@@ -93,6 +97,13 @@ export class EstudianteService {
     return `This action removes a #${id} estudiante`;
   }
 
-  
+  createCompetenciaEstudiante(body:registrarCompetenciaDto){
 
+    const nuevoDato = this.competendiaEstudianteRepository.create(body)
+    return this.competendiaEstudianteRepository.save(nuevoDato)
+  }
+  getCompetenciaEstudiante(estudianteId:number){
+    const consulta = this.competendiaEstudianteRepository.find({where:{estudianteId},relations:['competencia']})
+    return consulta
+  }
 }
