@@ -17,7 +17,6 @@ export class EstudianteService {
     private estudianteRepository: Repository<Estudiante>,
     @InjectRepository(Inscripciones)
     private inscripcionRepository: Repository<Inscripciones>,
-
   ) {}
 
   async inscribir(inscripcion: InscripcionDto) {
@@ -55,8 +54,21 @@ export class EstudianteService {
       .getMany();
     return consulta;
   }
-  async retirarMateria(id:number) {
-    const consulta = await this.inscripcionRepository.softDelete({id});
+
+  async getinscripcion(id: number) {
+    const consulta = await this.estudianteRepository
+      .createQueryBuilder('estudiante')
+      .select(['estudiante', 'i', 'a', 'u']) // consulta chida
+      .where('i.asignatura IS NOT NULL')
+      .andWhere({id})
+      .leftJoin('estudiante.iduser', 'u')
+      .leftJoin('estudiante.inscripcion', 'i')
+      .leftJoin('i.asignatura', 'a')
+      .getMany();
+    return consulta;
+  }
+  async retirarMateria(id: number) {
+    const consulta = await this.inscripcionRepository.softDelete({ id });
     return consulta;
   }
 
@@ -80,5 +92,7 @@ export class EstudianteService {
   remove(id: number) {
     return `This action removes a #${id} estudiante`;
   }
+
+  
 
 }

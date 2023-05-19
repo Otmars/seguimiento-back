@@ -17,6 +17,14 @@ export class EstudianteController {
   inscribidos() {
     return this.estudianteService.getinscripciones();
   }
+
+  @Get('/inscripcion/:id')
+  estudianteinscrito(@Param('id') id :string ) {
+    return this.estudianteService.getinscripcion(+id);
+  }
+
+
+
   @Delete('/retirar/:id')
   retirar(@Param('id') id: string) {
     return this.estudianteService.retirarMateria(+id);

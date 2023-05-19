@@ -16,7 +16,9 @@ export class CalificacionEstudiante {
   @Column()
   estudianteId: number;
 
-  
+  @Column({default:0})
+  calificacionObtenida: number;
+
   @DeleteDateColumn()
   deletedAt: Date;
 

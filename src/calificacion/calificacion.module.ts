@@ -7,9 +7,10 @@ import { Asignatura } from 'src/asignatura/entities/asignatura.entity';
 import { AsignaturaService } from 'src/asignatura/asignatura.service';
 import { AsignaturaModule } from 'src/asignatura/asignatura.module';
 import { CalificacionEstudiante } from './entities/calificacionEstudiante.entity';
+import { Inscripciones } from 'src/estudiante/entities/inscripcionesEstudiante.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Calificacion,CalificacionEstudiante]),AsignaturaModule],
+  imports: [TypeOrmModule.forFeature([Calificacion,CalificacionEstudiante,Inscripciones]),AsignaturaModule],
   controllers: [CalificacionController],
   providers: [CalificacionService]
 })

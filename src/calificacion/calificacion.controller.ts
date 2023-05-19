@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CalificacionService } from './calificacion.service';
 import { CreateCalificacionDto } from './dto/create-calificacion.dto';
@@ -32,9 +40,27 @@ export class CalificacionController {
   findCalificacionesAsignatura(@Param('id') id: string) {
     return this.calificacionService.findCalificacionesAsignatura(+id);
   }
+  @Post('/estudiante/:id')
+  findCalificacionEstudiante(
+    @Param('id') id: string,
+    @Body() idAsinatura: any,
+  ) {
+    return this.calificacionService.getcalificacionEstudiante(+id, idAsinatura);
+  }
+
+  @Post('calificacion-estudiante/:id')
+  calificando(
+    @Param('id') id: string,
+    @Body() body:any,
+  ) {
+    return this.calificacionService.calificar(+id, body);
+  }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCalificacionDto: UpdateCalificacionDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateCalificacionDto: UpdateCalificacionDto,
+  ) {
     return this.calificacionService.update(+id, updateCalificacionDto);
   }
 
