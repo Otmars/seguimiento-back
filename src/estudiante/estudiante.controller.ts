@@ -26,7 +26,7 @@ export class EstudianteController {
 
   @Get('/inscripcion/:id')
   estudianteinscrito(@Param('id') id :string ) {
-    return this.estudianteService.getinscripcion(+id);
+    return this.estudianteService.getinscripcion(id);
   }
 
   @Get('/competencia/:id')

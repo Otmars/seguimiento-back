@@ -45,11 +45,17 @@ export class CalificacionService {
 
     const consulta = await this.calificacionestudianteService
       .createQueryBuilder('ce')
-      .select(['ce','c.puntaje','c.asignaturaId','c.descripcion','a.nombre'])
+      .select([
+        'ce',
+        'c.puntaje',
+        'c.asignaturaId',
+        'c.descripcion',
+        'a.nombre',
+      ])
       .where('c.asignaturaId = :id', { id: idAsinatura.asignaturaId }) // consulta chida
       .andWhere('ce.estudianteId = :ids', { ids: estudianteId })
       .leftJoin('ce.calificacion', 'c')
-      .leftJoin('c.asignatura','a')
+      .leftJoin('c.asignatura', 'a')
       .getMany();
     return consulta;
   }
@@ -86,7 +92,6 @@ export class CalificacionService {
       }
     } else if (tipo == 'Parcial') {
       if (puntaje + createCalificacionDto.puntaje <= 35) {
-
         // return this.calificacionService.save(nuevaCalificacion);
         const calificacionGuardada = await this.calificacionService.save(
           nuevaCalificacion,
@@ -150,18 +155,35 @@ export class CalificacionService {
     return this.calificacionService.softDelete(id);
   }
 
-  findCalificacionesAsignatura(id: number) {
-    
-    return this.calificacionService.find({
+  async findCalificacionesAsignatura(id: number) {
+    return await this.calificacionService.find({
       where: { asignaturaId: id },
       order: { tipoCalificacion: 'ASC' },
     });
   }
 
-  async calificar(id:number,body:any) {
+  async calificar(id: number, body: any) {
     console.log('aqui');
     await this.calificacionestudianteService.update({ id }, body);
-    
-    return this.calificacionestudianteService.findBy({id})
+
+    return this.calificacionestudianteService.findBy({ id });
+  }
+  async todasCalificaiones(estudianteId: string,) {
+    const consulta = await this.calificacionestudianteService
+      .createQueryBuilder('ce')
+      .select([
+        'ce',
+        'c.puntaje',
+        'c.asignaturaId',
+        'c.descripcion',
+        'a.nombre',
+      ])
+      .where('u.id = :ids', { ids: estudianteId })
+      .leftJoin('ce.calificacion', 'c')
+      .leftJoin('c.asignatura', 'a')
+      .leftJoin('ce.estudiante', 'e')
+      .leftJoin('e.iduser', 'u').orderBy('c.asignaturaId')
+      .getMany();
+    return consulta;
   }
 }

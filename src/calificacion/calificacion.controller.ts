@@ -48,6 +48,16 @@ export class CalificacionController {
     return this.calificacionService.getcalificacionEstudiante(+id, idAsinatura);
   }
 
+  @Get('/all_estudiante/:id')
+  findAllCalificacionEstudiante(
+    @Param('id') id: string,
+  ) {
+    console.log("aqui");
+    
+    return this.calificacionService.todasCalificaiones(id);
+
+  }
+
   @Post('calificacion-estudiante/:id')
   calificando(
     @Param('id') id: string,

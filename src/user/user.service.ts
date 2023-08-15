@@ -152,7 +152,6 @@ export class UserService {
       where: { username },
       relations: ['rol'],
     });
-    // console.log(finduser);
 
     if (!finduser) {
       return new HttpException('El usuario no existe', HttpStatus.NOT_FOUND);
@@ -181,5 +180,19 @@ export class UserService {
     };
 
     return data;
+  }
+
+  async findCalificacionesEstudiante(id: string) {
+    console.log(id);
+    
+    const consulta = await this.estudianteRepository
+      .createQueryBuilder('estudiante').select('estudiante.id')
+      .where('u.id = :id', { id }) // consulta chida
+      .leftJoin('estudiante.iduser', 'u')
+      .getMany();
+
+      console.log(consulta);
+      
+    return consulta;
   }
 }

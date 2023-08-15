@@ -59,12 +59,14 @@ export class EstudianteService {
     return consulta;
   }
 
-  async getinscripcion(id: number) {
+  async getinscripcion(id: string) {
+    console.log(id);
+
     const consulta = await this.estudianteRepository
       .createQueryBuilder('estudiante')
-      .select(['estudiante', 'i', 'a', 'u']) // consulta chida
+      .select(['estudiante.id', 'i.id', 'a']) // consulta chida
       .where('i.asignatura IS NOT NULL')
-      .andWhere({id})
+      .andWhere('u.id = :iduser', { iduser: id })
       .leftJoin('estudiante.iduser', 'u')
       .leftJoin('estudiante.inscripcion', 'i')
       .leftJoin('i.asignatura', 'a')
@@ -97,13 +99,21 @@ export class EstudianteService {
     return `This action removes a #${id} estudiante`;
   }
 
-  createCompetenciaEstudiante(body:registrarCompetenciaDto){
+  createCompetenciaEstudiante(body: registrarCompetenciaDto) {
+    const nuevoDato = this.competendiaEstudianteRepository.create(body);
+    return this.competendiaEstudianteRepository.save(nuevoDato);
+  }
+  getCompetenciaEstudiante(estudianteId: number) {
+    const consulta = this.competendiaEstudianteRepository.find({
+      where: { estudianteId },
+      relations: ['competencia'],
+    });
+    return consulta;
+  }
 
-    const nuevoDato = this.competendiaEstudianteRepository.create(body)
-    return this.competendiaEstudianteRepository.save(nuevoDato)
+  getfindcalificaciones (id:string){
+
   }
-  getCompetenciaEstudiante(estudianteId:number){
-    const consulta = this.competendiaEstudianteRepository.find({where:{estudianteId},relations:['competencia']})
-    return consulta
-  }
+
+  
 }
