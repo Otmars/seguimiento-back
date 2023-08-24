@@ -103,17 +103,55 @@ export class EstudianteService {
     const nuevoDato = this.competendiaEstudianteRepository.create(body);
     return this.competendiaEstudianteRepository.save(nuevoDato);
   }
-  getCompetenciaEstudiante(estudianteId: number) {
-    const consulta = this.competendiaEstudianteRepository.find({
-      where: { estudianteId },
-      relations: ['competencia'],
-    });
-    return consulta;
+
+  getCompetenciaEstudiante(estudianteId: number, datos: any) {
+    // const consulta = this.competendiaEstudianteRepository.find({
+    //   where: { estudianteId },
+    //   relations: ['competencia'],
+    // });
+    // console.log(datos);
+    const consulta2 = this.competendiaEstudianteRepository
+      .createQueryBuilder('comEst')
+      .select(['comEst.estudianteId', 'c', 'asicom', 'asi']) // consulta chida
+      .where('estudianteId = :idestudiante', { idestudiante: estudianteId })
+      .andWhere('asicom.asignaturaid = :idasignatura', {
+        idasignatura: datos.asignaturaid,
+      })
+      .leftJoin('comEst.competencia', 'c')
+      .leftJoin('c.asignaturaCompetencia', 'asicom')
+      .leftJoin('asicom.asignatura', 'asi')
+      .getMany();
+    return consulta2;
   }
+  async getAllCompetenciaEstudiante(estudianteId: string) {
+    
 
-  getfindcalificaciones (id:string){
+    // const iduser:Estudiante[] = await this.estudianteRepository
+    //   .createQueryBuilder('estudiante')
+    //   .select(['estudiante'])
+    //   .where('u.id = :ids', { ids: estudianteId })
+    //   .leftJoin('estudiante.iduser', 'u').getMany();
 
+    // console.log(iduser[0].id);
+    
+    const consulta2 = await this.competendiaEstudianteRepository
+      .createQueryBuilder('comEst')
+      .select(['comEst.estudianteId', 'c', 'asicom', 'asi']) // consulta chida
+      .where('u.id = :ids', { ids: estudianteId })
+      // .andWhere('asicom.asignaturaid = :idasignatura',{idasignatura:datos.asignaturaid})
+      .leftJoin('comEst.competencia', 'c')
+      .leftJoin('c.asignaturaCompetencia', 'asicom')
+      .leftJoin('asicom.asignatura', 'asi')
+      .leftJoin('comEst.estudiante', 'e')
+      .leftJoin('e.iduser', 'u')
+      .getRawMany();
+
+    // const consulta = this.competendiaEstudianteRepository.find({
+    //   where: { estudianteId :iduser[0].id},
+    //   relations: ['competencia'],
+      
+    // });
+
+    return consulta2;
   }
-
-  
 }

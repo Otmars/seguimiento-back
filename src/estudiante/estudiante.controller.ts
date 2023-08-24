@@ -28,10 +28,13 @@ export class EstudianteController {
   estudianteinscrito(@Param('id') id :string ) {
     return this.estudianteService.getinscripcion(id);
   }
-
   @Get('/competencia/:id')
-  getComptenciaEstudiante(@Param('id') id :string ) {
-    return this.estudianteService.getCompetenciaEstudiante(+id);
+  getAllComptenciaEstudiante(@Param('id') id :string) {
+    return this.estudianteService.getAllCompetenciaEstudiante(id);
+  }
+  @Post('/competencia/:id')
+  getComptenciaEstudiante(@Param('id') id :string, @Body() datos: any) {
+    return this.estudianteService.getCompetenciaEstudiante(+id,datos);
   }
 
 
