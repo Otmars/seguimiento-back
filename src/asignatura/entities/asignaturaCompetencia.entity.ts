@@ -1,6 +1,7 @@
-import { Entity, Column, ManyToOne, PrimaryGeneratedColumn, DeleteDateColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, PrimaryGeneratedColumn, DeleteDateColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { Asignatura } from './asignatura.entity';
 import { Competencia } from 'src/competencia/entities/competencia.entity';
+import { CompetenciaEstudiante } from 'src/estudiante/entities/competenciasEstudiante.entity';
 
 @Entity()
 export class AsignaturaToCompetencia {
@@ -30,4 +31,10 @@ export class AsignaturaToCompetencia {
     (competencia) => competencia.asignaturaCompetencia,
   )
   competencia: Competencia;
+
+  @OneToMany(
+    () => CompetenciaEstudiante,
+    (CompetenciaEstudiante) => CompetenciaEstudiante.competencia,
+  )
+  estudiante: CompetenciaEstudiante;
 }

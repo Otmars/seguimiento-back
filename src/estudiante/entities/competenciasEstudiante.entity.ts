@@ -3,6 +3,7 @@ import { Entity, Column, ManyToOne, PrimaryGeneratedColumn, DeleteDateColumn, Cr
 import { Asignatura } from 'src/asignatura/entities/asignatura.entity';
 import { Estudiante } from './estudiante.entity';
 import { Competencia } from 'src/competencia/entities/competencia.entity';
+import { AsignaturaToCompetencia } from 'src/asignatura/entities/asignaturaCompetencia.entity';
 
 @Entity()
 export class CompetenciaEstudiante {
@@ -10,7 +11,7 @@ export class CompetenciaEstudiante {
   id: number;
 
   @Column()
-  competenciaId: number;
+  competenciaAsignaturaCompetenciaId: number;
 
   @Column()
   estudianteId: number;
@@ -24,8 +25,8 @@ export class CompetenciaEstudiante {
   @DeleteDateColumn()
   deletedAt: Date;
 
-  @ManyToOne(() => Competencia, (competencia) => competencia.asignaturaCompetencia)
-  competencia: Competencia;
+  @ManyToOne(() => AsignaturaToCompetencia, (asignaturaCompetencia) => asignaturaCompetencia.estudiante)
+  competencia: AsignaturaToCompetencia[];
 
   @ManyToOne(() => Estudiante, (estudiante) => estudiante.competencia,{onDelete:'CASCADE'})
   estudiante: Estudiante;

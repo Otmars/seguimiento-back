@@ -16,6 +16,7 @@ import { CreateProfileDto } from './dto/create-profile.dto';
 import { JwtAuthGuard } from './guardjwt';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { LoginUserDto } from './dto/login-user.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @ApiTags('user')
 @ApiBearerAuth()
@@ -69,5 +70,10 @@ export class UserController {
     @Body() createProfileDto: CreateProfileDto,
   ) {
     return this.userService.createProfile(id, createProfileDto);
+  }
+
+  @Post('/changepass')
+  change_pass(@Body() changePasswordDto: ChangePasswordDto) {
+    return this.userService.changepassword(changePasswordDto);
   }
 }

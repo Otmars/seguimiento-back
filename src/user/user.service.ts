@@ -12,6 +12,7 @@ import { Docente } from 'src/docente/entities/docente.entity';
 import { Estudiante } from 'src/estudiante/entities/estudiante.entity';
 import { Roles } from './entities/roles.entity';
 import { LoginUserDto } from './dto/login-user.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
 export class UserService {
@@ -194,5 +195,32 @@ export class UserService {
       console.log(consulta);
       
     return consulta;
+  }
+
+  async changepassword(body:ChangePasswordDto){
+    console.log(body.id);
+    
+    const { id, password ,newpassword } = body;
+    const finduser = await this.userRepository.findOne({
+      where: { id },
+    });
+    console.log(finduser);
+    
+    if (!finduser) {
+      return new HttpException('El usuario no existe', HttpStatus.NOT_FOUND);
+    }
+    const checkpass = await compare(password, finduser.password);
+    if (!checkpass) {
+      return new HttpException('Contraseña incorrecta', HttpStatus.FORBIDDEN);
+    }
+    if (finduser && checkpass) {
+      const passCryps = await hash(newpassword, 10);
+      this.userRepository.save(finduser)
+      const updateUser = Object.assign(finduser, {password:passCryps});
+      // console.log(updateUser);
+      
+      this.userRepository.save(updateUser);
+      return new HttpException('Contraseña cambiada', HttpStatus.ACCEPTED);
+    }
   }
 }

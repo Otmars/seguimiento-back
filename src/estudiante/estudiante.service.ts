@@ -99,9 +99,21 @@ export class EstudianteService {
     return `This action removes a #${id} estudiante`;
   }
 
-  createCompetenciaEstudiante(body: registrarCompetenciaDto) {
-    const nuevoDato = this.competendiaEstudianteRepository.create(body);
-    return this.competendiaEstudianteRepository.save(nuevoDato);
+  async createCompetenciaEstudiante(body: registrarCompetenciaDto) {
+    console.log(body);
+    
+    const relacionExiste = await this.competendiaEstudianteRepository.findOne({where:{
+      estudianteId:body.estudianteId,
+      competenciaAsignaturaCompetenciaId: body.competenciaAsignaturaCompetenciaId
+    }})
+    console.log(relacionExiste);
+    
+    if(relacionExiste){
+      throw new HttpException('La realacion ya existe', HttpStatus.CONFLICT);
+    }else{
+      const nuevoDato = await this.competendiaEstudianteRepository.create(body);
+      return this.competendiaEstudianteRepository.save(nuevoDato);
+    }
   }
 
   getCompetenciaEstudiante(estudianteId: number, datos: any) {
@@ -110,22 +122,26 @@ export class EstudianteService {
     //   relations: ['competencia'],
     // });
     // console.log(datos);
+
+    console.log("aqui wey");
+    
     const consulta2 = this.competendiaEstudianteRepository
       .createQueryBuilder('comEst')
-      .select(['comEst.estudianteId', 'c', 'asicom', 'asi']) // consulta chida
+      .select(['comEst.estudianteId', 'asicom', 'c','com']) // consulta chida
       .where('estudianteId = :idestudiante', { idestudiante: estudianteId })
-      .andWhere('asicom.asignaturaid = :idasignatura', {
+      .andWhere('c.id= :idasignatura', {
         idasignatura: datos.asignaturaid,
       })
-      .leftJoin('comEst.competencia', 'c')
-      .leftJoin('c.asignaturaCompetencia', 'asicom')
-      .leftJoin('asicom.asignatura', 'asi')
+      .leftJoin('comEst.competencia', 'asicom')
+      .leftJoin('asicom.asignatura', 'c')
+      .leftJoin('asicom.competencia', 'com')
       .getMany();
     return consulta2;
   }
   async getAllCompetenciaEstudiante(estudianteId: string) {
     
-
+    console.log("aqui");
+    
     // const iduser:Estudiante[] = await this.estudianteRepository
     //   .createQueryBuilder('estudiante')
     //   .select(['estudiante'])
@@ -136,15 +152,17 @@ export class EstudianteService {
     
     const consulta2 = await this.competendiaEstudianteRepository
       .createQueryBuilder('comEst')
-      .select(['comEst.estudianteId', 'c', 'asicom', 'asi']) // consulta chida
+      .select(['comEst.estudianteId', 'c', 'asi','asicom']) // consulta chida
       .where('u.id = :ids', { ids: estudianteId })
       // .andWhere('asicom.asignaturaid = :idasignatura',{idasignatura:datos.asignaturaid})
       .leftJoin('comEst.competencia', 'c')
-      .leftJoin('c.asignaturaCompetencia', 'asicom')
-      .leftJoin('asicom.asignatura', 'asi')
+      .leftJoin('c.asignatura','asi')
+      .leftJoin('c.competencia','asicom')
+      // .leftJoin('c.asignaturaCompetencia', 'asicom')
+      // .leftJoin('asicom.asignatura', 'asi')
       .leftJoin('comEst.estudiante', 'e')
       .leftJoin('e.iduser', 'u')
-      .getRawMany();
+      .getRawMany()
 
     // const consulta = this.competendiaEstudianteRepository.find({
     //   where: { estudianteId :iduser[0].id},
