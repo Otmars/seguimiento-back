@@ -39,7 +39,7 @@ export class UserService {
     const primernombre = nombres.split(' ');
     const { ci } = createUserDto;
     const { rol } = createUserDto;
-    const passCryps = await hash(ci, 10);
+    const passCryps = await hash(ci.toString(), 10);
     createUserDto = { ...createUserDto, username: primernombre[0] + '_' + ci ,password:passCryps};
     const userFound = await this.userRepository.findOne({
       where: {
