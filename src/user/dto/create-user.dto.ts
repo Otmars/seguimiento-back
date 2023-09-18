@@ -23,6 +23,7 @@ export class CreateUserDto {
   apellidoMaterno: string;
 
   @ApiProperty()
+  @IsOptional()
   @IsEmail()
   email: string;
 

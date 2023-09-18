@@ -81,6 +81,7 @@ export class EstudianteService {
   async findAll() {
     return await this.estudianteRepository.find({
       relations: ['iduser'],
+      order:{id:'DESC'}
     });
   }
 

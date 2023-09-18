@@ -21,6 +21,7 @@ export class DocenteService {
   async findAll() {
     return await this.docenteRepository.find({
       relations: ['iduser'],
+      order:{id:'DESC'}
     });
   }
   async findAllNombre(){

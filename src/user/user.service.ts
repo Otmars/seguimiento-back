@@ -26,20 +26,21 @@ export class UserService {
   ) {}
   async create(createUserDto: CreateUserDto) {
     const { fnacimiento } = createUserDto;
-    const datofecha = fnacimiento.split('-');
+    // const datofecha = fnacimiento.split('-');
 
-    const nuevapassword =
-      datofecha[2] + '-' + datofecha[1] + '-' + datofecha[0];
-    // console.log(nuevapassword);
+    // const nuevapassword =
+    //   datofecha[2] + '-' + datofecha[1] + '-' + datofecha[0];
+    // // console.log(nuevapassword);
 
-    const passCryps = await hash(nuevapassword, 10);
-    createUserDto = { ...createUserDto, password: passCryps };
+    // const passCryps = await hash(nuevapassword, 10);
+    // createUserDto = { ...createUserDto, password: passCryps };
 
     const { nombres } = createUserDto;
     const primernombre = nombres.split(' ');
     const { ci } = createUserDto;
     const { rol } = createUserDto;
-    createUserDto = { ...createUserDto, username: primernombre[0] + '_' + ci };
+    const passCryps = await hash(ci, 10);
+    createUserDto = { ...createUserDto, username: primernombre[0] + '_' + ci ,password:passCryps};
     const userFound = await this.userRepository.findOne({
       where: {
         username: primernombre[0] + '_' + ci,

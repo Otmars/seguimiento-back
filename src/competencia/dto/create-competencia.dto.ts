@@ -10,6 +10,4 @@ export class CreateCompetenciaDto {
   @ApiProperty()
   tipoCompetencia?: TipoCompentecia;
 
-  @ApiProperty()
-  asignaturaId:number
 }

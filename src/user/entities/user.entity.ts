@@ -29,22 +29,22 @@ export class User {
   @Column('varchar')
   apellidoMaterno: string;
 
-  @Column({type:"varchar",default:null})
+  @Column({type:"varchar",default:'No registrado'})
   email: string;
 
-  @Column({ type: 'int', width: 8 })
+  @Column({type:'int' ,width: 8 ,nullable:true})
   telefono: string;
 
-  @Column('varchar')
+  @Column({default:'No registrado'})
   direccion: string;
 
-  @Column({ type: 'int', width: 8 })
+  @Column({ type: 'int', width: 10})
   ci: string;
 
   //   @Column({ type: 'int', width: 10 }) //dato de estudiante
   //   ru: string;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'date' ,nullable:true})
   fnacimiento: string;
 
   @DeleteDateColumn()

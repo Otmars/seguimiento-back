@@ -16,7 +16,7 @@ export class CompetenciaService {
   ) {}
 
   async create(createCompetenciaDto: CreateCompetenciaDto) {
-    const asignaturaId = createCompetenciaDto.asignaturaId;
+   
 
     // const asi = await this.asignaturaService.find({where:{id:id}});
 
@@ -49,7 +49,7 @@ export class CompetenciaService {
   }
 
   findAll() {
-    return this.competenciaService.find();
+    return this.competenciaService.find({order:{id:"DESC"}});
   }
 
   findOne(id: number) {
