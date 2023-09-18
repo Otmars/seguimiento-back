@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { EstudianteService } from './estudiante.service';
-import { CreateEstudianteDto, InscripcionDto, registrarCompetenciaDto } from './dto/create-estudiante.dto';
+import { CreateEstudianteDto, InscripcionDto, Masivo, registrarCompetenciaDto } from './dto/create-estudiante.dto';
 import { UpdateEstudianteDto } from './dto/update-estudiante.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/user/guardjwt';
@@ -10,6 +10,11 @@ import { JwtAuthGuard } from 'src/user/guardjwt';
 @Controller('estudiante')
 export class EstudianteController {
   constructor(private readonly estudianteService: EstudianteService) {}
+
+  @Post('/masivo')
+  incripcionMasivo(@Body() createEstudianteDto: Masivo) {
+    return this.estudianteService.inscribirMasivo(createEstudianteDto);
+  }
 
   @Post('/inscripcion')
   incripcion(@Body() createEstudianteDto: InscripcionDto) {

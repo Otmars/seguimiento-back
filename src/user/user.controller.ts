@@ -63,7 +63,7 @@ export class UserController {
   remove(@Param('id') id: string) {
     return this.userService.remove(id);
   }
-  
+
   @UseGuards(JwtAuthGuard)
   @Post(':id/profile')
   createProfile(

@@ -13,3 +13,10 @@ export class registrarCompetenciaDto {
   competenciaAsignaturaCompetenciaId: any;
   estudianteId: number;
 }
+
+export class Masivo {
+  sigla:string;
+  paralelo: string;
+  username: string;
+  gestion: number;
+}
