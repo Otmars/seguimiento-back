@@ -51,7 +51,7 @@ export class AsignaturaService {
       .select(['asignatura', 'd.id', 'u.id', 'u.nombres']) // consulta chida
       .leftJoin('asignatura.docente', 'd')
       .leftJoin('d.iduser', 'u')
-      .orderBy('id','DESC')
+      .orderBy('asignatura.id','DESC')
       .getMany();
     return consulta;
   }
