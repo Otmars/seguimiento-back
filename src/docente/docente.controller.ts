@@ -1,10 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { DocenteService } from './docente.service';
 import { CreateDocenteDto } from './dto/create-docente.dto';
 import { UpdateDocenteDto } from './dto/update-docente.dto';
+import { JwtAuthGuard } from 'src/user/guardjwt';
 
 @ApiTags('docente')
+@UseGuards(JwtAuthGuard)
 @Controller('docente')
 export class DocenteController {
   constructor(private readonly docenteService: DocenteService) {}

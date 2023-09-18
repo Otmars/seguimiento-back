@@ -6,13 +6,16 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CalificacionService } from './calificacion.service';
 import { CreateCalificacionDto } from './dto/create-calificacion.dto';
 import { UpdateCalificacionDto } from './dto/update-calificacion.dto';
+import { JwtAuthGuard } from 'src/user/guardjwt';
 
 @ApiTags('asignatura')
+@UseGuards(JwtAuthGuard)
 @Controller('calificacion')
 export class CalificacionController {
   constructor(private readonly calificacionService: CalificacionService) {}
@@ -49,20 +52,14 @@ export class CalificacionController {
   }
 
   @Get('/all_estudiante/:id')
-  findAllCalificacionEstudiante(
-    @Param('id') id: string,
-  ) {
-    console.log("aqui");
-    
-    return this.calificacionService.todasCalificaiones(id);
+  findAllCalificacionEstudiante(@Param('id') id: string) {
+    console.log('aqui');
 
+    return this.calificacionService.todasCalificaiones(id);
   }
 
   @Post('calificacion-estudiante/:id')
-  calificando(
-    @Param('id') id: string,
-    @Body() body:any,
-  ) {
+  calificando(@Param('id') id: string, @Body() body: any) {
     return this.calificacionService.calificar(+id, body);
   }
 

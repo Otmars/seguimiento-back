@@ -1,11 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CompetenciaService } from './competencia.service';
 import { CreateCompetenciaDto } from './dto/create-competencia.dto';
 import { UpdateCompetenciaDto } from './dto/update-competencia.dto';
 import { competenciaAsignatura } from '../asignatura/dto/competencia-asignatura.dto';
+import { JwtAuthGuard } from 'src/user/guardjwt';
 
 @ApiTags('competencia')
+@UseGuards(JwtAuthGuard)
 @Controller('competencia')
 export class CompetenciaController {
   constructor(private readonly competenciaService: CompetenciaService) {}

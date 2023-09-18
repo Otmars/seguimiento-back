@@ -20,50 +20,51 @@ import { ChangePasswordDto } from './dto/change-password.dto';
 
 @ApiTags('user')
 @ApiBearerAuth()
-
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+  @UseGuards(JwtAuthGuard)
   @Get('/profile')
   findallprofile() {
     return this.userService.getProfiles();
   }
 
-  
   @Post('/login')
-  login(@Body() loginUserDto: LoginUserDto ){
+  login(@Body() loginUserDto: LoginUserDto) {
     return this.userService.login(loginUserDto);
   }
-  
+
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll(): Promise<User[]> {
     return this.userService.findAll();
   }
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.userService.findOne(id);
   }
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(id, updateUserDto);
   }
-  
-  // @UseGuards(JwtAuthGuard)
+
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.remove(id);
   }
-
+  
+  @UseGuards(JwtAuthGuard)
   @Post(':id/profile')
   createProfile(
     @Param('id') id: string,
@@ -72,6 +73,7 @@ export class UserController {
     return this.userService.createProfile(id, createProfileDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('/changepass')
   change_pass(@Body() changePasswordDto: ChangePasswordDto) {
     return this.userService.changepassword(changePasswordDto);
