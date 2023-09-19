@@ -191,16 +191,16 @@ export class EstudianteService {
     }
   }
 
-  getCompetenciaEstudiante(estudianteId: number, datos: any) {
+  async getCompetenciaEstudiante(estudianteId: number, datos: any) {
     // const consulta = this.competendiaEstudianteRepository.find({
     //   where: { estudianteId },
     //   relations: ['competencia'],
     // });
     // console.log(datos);
 
-    console.log('aqui wey');
+    // console.log({estudianteId,datos});
 
-    const consulta2 = this.competendiaEstudianteRepository
+    const consulta2 = await this.competendiaEstudianteRepository
       .createQueryBuilder('comEst')
       .select(['comEst.estudianteId', 'asicom', 'c', 'com']) // consulta chida
       .where('estudianteId = :idestudiante', { idestudiante: estudianteId })
@@ -211,18 +211,18 @@ export class EstudianteService {
       .leftJoin('asicom.asignatura', 'c')
       .leftJoin('asicom.competencia', 'com')
       .getMany();
+
+    // console.log(consulta2);
+    
     return consulta2;
   }
   async getAllCompetenciaEstudiante(estudianteId: string) {
-    console.log('aqui');
 
     // const iduser:Estudiante[] = await this.estudianteRepository
     //   .createQueryBuilder('estudiante')
     //   .select(['estudiante'])
     //   .where('u.id = :ids', { ids: estudianteId })
     //   .leftJoin('estudiante.iduser', 'u').getMany();
-
-    // console.log(iduser[0].id);
 
     const consulta2 = await this.competendiaEstudianteRepository
       .createQueryBuilder('comEst')
