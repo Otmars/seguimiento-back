@@ -3,11 +3,12 @@ import { CreateAsignaturaDto } from './dto/create-asignatura.dto';
 import { UpdateAsignaturaDto } from './dto/update-asignatura.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Asignatura } from './entities/asignatura.entity';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { async } from 'rxjs';
 import { AsignaturaToCompetencia } from './entities/asignaturaCompetencia.entity';
 import { competenciaAsignatura } from './dto/competencia-asignatura.dto';
 import { Inscripciones } from 'src/estudiante/entities/inscripcionesEstudiante.entity';
+import { Competencia } from 'src/competencia/entities/competencia.entity';
 
 @Injectable()
 export class AsignaturaService {
@@ -18,6 +19,8 @@ export class AsignaturaService {
     private asiToComService: Repository<AsignaturaToCompetencia>,
     @InjectRepository(Inscripciones)
     private inscripcionService: Repository<Inscripciones>,
+    @InjectRepository(Competencia)
+    private competenciaRepository: Repository<Competencia>,
   ) {}
 
   async create(createAsignaturaDto: CreateAsignaturaDto) {
@@ -38,11 +41,43 @@ export class AsignaturaService {
   }
 
   async getasignaturaToCompetencia(id: number) {
-    return await this.asiToComService.find({
-      where: { asignaturaId: id },
-      // relations: ['asignatura','competencia'],
-      relations: ['competencia'],
-    });
+    let competenciasNoAsignadas: any[] = [];
+    let competenciasAsignadas: any[] = [];
+    // console.log("aqui");
+    const materias = await this.asiToComService
+      .createQueryBuilder('asicom')
+      .select('asicom.competenciaId')
+      .where('asignaturaId = :id', { id })
+      .getMany();
+    const competencias = await this.competenciaRepository.find();
+    var contador = 0;
+    // await materias.forEach(async (element) => {
+    //   let c: any[] = [];
+    //   const idcom = element.competenciaId
+    //   // console.log(element.competenciaId);
+    //   const competencias = await this.competenciaRepository.findOne({where:{id:element.competenciaId}});
+    //   // console.log(competencias);
+
+    //   c.push(competencias)
+    //   competenciasNoAsignadas=c
+    //   return c
+    // });
+    // console.log(competenciasNoAsignadas);
+    for (let i = 0; i < materias.length; i++) {
+      const dato = await this.competenciaRepository.findOne({
+        where: { id: materias[i].competenciaId },
+      });
+      competenciasAsignadas.push(dato);
+    }
+    for (let i = 0; i < materias.length; i++) {
+      for (let j = 0; j < competencias.length; j++) {
+        if (materias[i].competenciaId == competencias[j].id) {
+          competencias.splice(j, 1);
+          competenciasNoAsignadas = competencias;
+        }
+      }
+    }
+    return { competenciasNoAsignadas, competenciasAsignadas };
   }
 
   async findAll() {
@@ -51,15 +86,17 @@ export class AsignaturaService {
       .select(['asignatura', 'd.id', 'u.id', 'u.nombres']) // consulta chida
       .leftJoin('asignatura.docente', 'd')
       .leftJoin('d.iduser', 'u')
-      .orderBy('asignatura.id','DESC')
+      .orderBy('asignatura.id', 'DESC')
       .getMany();
     return consulta;
   }
 
   async findOne(id: number) {
-    const asignaturaFound = await this.asignaturaService.findOne({where:{id}})
-    if(!asignaturaFound){
-      throw new HttpException('Asignatura no existe',HttpStatus.NOT_FOUND)
+    const asignaturaFound = await this.asignaturaService.findOne({
+      where: { id },
+    });
+    if (!asignaturaFound) {
+      throw new HttpException('Asignatura no existe', HttpStatus.NOT_FOUND);
     }
     const consulta = await this.asignaturaService
       .createQueryBuilder('asignatura')
@@ -104,8 +141,18 @@ export class AsignaturaService {
     // const consulta = await this.inscripcionService.find({where:{asignaturaId:id},relations:['estudiante']})
     const consulta = await this.inscripcionService
       .createQueryBuilder('inscripcion')
-      .select(['inscripcion', 'e.id', 'u.id', 'u.nombres','u.apellidoPaterno','u.apellidoMaterno','u.ci','u.email' , 'a']) // consulta chida
-      .where({asignaturaId:id})
+      .select([
+        'inscripcion',
+        'e.id',
+        'u.id',
+        'u.nombres',
+        'u.apellidoPaterno',
+        'u.apellidoMaterno',
+        'u.ci',
+        'u.email',
+        'a',
+      ]) // consulta chida
+      .where({ asignaturaId: id })
       .innerJoin('inscripcion.asignatura', 'a')
       .innerJoin('inscripcion.estudiante', 'e')
       .innerJoin('e.iduser', 'u')

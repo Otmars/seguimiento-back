@@ -66,7 +66,7 @@ export class UserService {
     // console.log(JSON.stringify(savedUser.rol) == "1");
 
     if (JSON.stringify(savedUser.rol) == '1') {
-      console.log('entra');
+      // console.log('entra');
 
       this.docenteRepository.save(id);
     }

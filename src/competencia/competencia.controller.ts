@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CompetenciaService } from './competencia.service';
 import { CreateCompetenciaDto } from './dto/create-competencia.dto';
 import { UpdateCompetenciaDto } from './dto/update-competencia.dto';
@@ -7,6 +7,7 @@ import { competenciaAsignatura } from '../asignatura/dto/competencia-asignatura.
 import { JwtAuthGuard } from 'src/user/guardjwt';
 
 @ApiTags('competencia')
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('competencia')
 export class CompetenciaController {
