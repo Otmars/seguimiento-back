@@ -31,10 +31,12 @@ export class AsignaturaController {
   asignaturaToCompetencia(@Body() createAsignaturaDto: competenciaAsignatura) {
     return this.asignaturaService.asignaturaToCompetencia(createAsignaturaDto);
   }
+  @Get('/asicomm/:id')
+  findOneAsiComm(@Param('id') id: string) {
+    return this.asignaturaService.getasignaturaToCompetenciaa(+id);
+  }
   @Get('/asicom/:id')
   findOneAsiCom(@Param('id') id: string) {
-    console.log();
-    
     return this.asignaturaService.getasignaturaToCompetencia(+id);
   }
   @Get('/inscritos/:id')
