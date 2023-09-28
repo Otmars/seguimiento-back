@@ -70,7 +70,12 @@ export class EstudianteService {
       throw new HttpException('Asignatura no existe', HttpStatus.NOT_FOUND);
     }
 
-    if (inscripcion.sigla == '400' || inscripcion.sigla == '500' || inscripcion.sigla == '501' || inscripcion.sigla == '401') {
+    if (
+      inscripcion.sigla == '400' ||
+      inscripcion.sigla == '500' ||
+      inscripcion.sigla == '501' ||
+      inscripcion.sigla == '401'
+    ) {
       const materias = await this.asignaturaRepository.find({
         where: {
           paralelo: inscripcion.paralelo,
@@ -87,16 +92,15 @@ export class EstudianteService {
             },
           });
           if (!inscripto) {
-            const nuevo = await this.inscripcionRepository.create( {
+            const nuevo = await this.inscripcionRepository.create({
               estudianteId: userFound.id,
               asignaturaId: element.id,
-              gestion:2023
+              gestion: 2023,
             });
             await this.inscripcionRepository.save(nuevo);
           }
-          
         }
-        return materias
+        return materias;
       }
     }
     const subir = await this.inscribir({
@@ -131,16 +135,16 @@ export class EstudianteService {
   }
 
   async getinscripcion(id: string) {
-    console.log(id);
-
     const consulta = await this.estudianteRepository
       .createQueryBuilder('estudiante')
-      .select(['estudiante.id', 'i.id', 'a']) // consulta chida
+      .select(['estudiante.id', 'i.id', 'a', 'd','us.nombres','us.apellidoPaterno','us.apellidoMaterno','us.email','us.telefono']) // consulta chida
       .where('i.asignatura IS NOT NULL')
       .andWhere('u.id = :iduser', { iduser: id })
       .leftJoin('estudiante.iduser', 'u')
       .leftJoin('estudiante.inscripcion', 'i')
       .leftJoin('i.asignatura', 'a')
+      .leftJoin('a.docente', 'd')
+      .leftJoin('d.iduser', 'us')
       .getMany();
     return consulta;
   }
@@ -213,11 +217,10 @@ export class EstudianteService {
       .getMany();
 
     // console.log(consulta2);
-    
+
     return consulta2;
   }
   async getAllCompetenciaEstudiante(estudianteId: string) {
-
     // const iduser:Estudiante[] = await this.estudianteRepository
     //   .createQueryBuilder('estudiante')
     //   .select(['estudiante'])
