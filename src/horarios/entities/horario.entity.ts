@@ -15,7 +15,7 @@ export class Horario {
   @Column({nullable:true})
   end: Date;
 
-  @Column()
+  @Column({nullable:false})
   userId: string;
 
   @ManyToOne(()=> User,(user)=> user.horario)
