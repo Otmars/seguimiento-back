@@ -11,9 +11,10 @@ import { Docente } from 'src/docente/entities/docente.entity';
 import { DocenteModule } from 'src/docente/docente.module';
 import { Roles } from './entities/roles.entity';
 import { Estudiante } from 'src/estudiante/entities/estudiante.entity';
+import { Horario } from 'src/horarios/entities/horario.entity';
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Profile ,Docente , Roles, Estudiante]),
+    TypeOrmModule.forFeature([User, Profile ,Docente , Roles, Estudiante,Horario]),
     PassportModule,
     JwtModule.register({
       secret: 'mi clave secreta',

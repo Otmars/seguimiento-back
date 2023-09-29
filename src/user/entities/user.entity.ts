@@ -1,6 +1,7 @@
 import { Post } from "src/post/entities/post.entity";
 import { Entity,Column,PrimaryGeneratedColumn, JoinColumn,OneToOne, OneToMany, ManyToOne, DeleteDateColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { Roles } from "./roles.entity";
+import { Horario } from "src/horarios/entities/horario.entity";
 
 @Entity({name: 'user'})
 export class User {
@@ -61,4 +62,7 @@ export class User {
 
   // @OneToMany(() => Post, (post) => post.autor)
   // posts: Post[];
+
+  @OneToMany(() => Horario, (horario) => horario.user)
+  horario : Horario[]
 }

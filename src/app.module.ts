@@ -23,6 +23,8 @@ import { Inscripciones } from './estudiante/entities/inscripcionesEstudiante.ent
 import { CompetenciaEstudiante } from './estudiante/entities/competenciasEstudiante.entity';
 import { Calificacion } from './calificacion/entities/calificacion.entity';
 import { CalificacionEstudiante } from './calificacion/entities/calificacionEstudiante.entity';
+import { HorariosModule } from './horarios/horarios.module';
+import { Horario } from './horarios/entities/horario.entity';
 
 @Module({
   imports: [
@@ -45,7 +47,8 @@ import { CalificacionEstudiante } from './calificacion/entities/calificacionEstu
         Inscripciones,
         CompetenciaEstudiante,
         Calificacion,
-        CalificacionEstudiante
+        CalificacionEstudiante,
+        Horario
       ],
       synchronize: true,
     }),
@@ -56,6 +59,7 @@ import { CalificacionEstudiante } from './calificacion/entities/calificacionEstu
     EstudianteModule,
     DocenteModule,
     CalificacionModule,
+    HorariosModule,
   ],
   controllers: [AppController],
   providers: [AppService],
