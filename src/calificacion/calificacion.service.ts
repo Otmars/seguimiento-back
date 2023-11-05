@@ -42,7 +42,8 @@ export class CalificacionService {
   }
   async getcalificacionEstudiante(estudianteId: number, idAsinatura: any) {
     console.log(estudianteId, '-----', idAsinatura.asignaturaId);
-
+    console.log("aqquiiiiiiiiiiiiii");
+    
     const consulta = await this.calificacionestudianteService
       .createQueryBuilder('ce')
       .select([
@@ -55,7 +56,7 @@ export class CalificacionService {
       .where('c.asignaturaId = :id', { id: idAsinatura.asignaturaId }) // consulta chida
       .andWhere('ce.estudianteId = :ids', { ids: estudianteId })
       .leftJoin('ce.calificacion', 'c')
-      .leftJoin('c.asignatura', 'a')
+      .leftJoin('c.asignatura', 'a').orderBy('ce.id','DESC')
       .getMany();
     return consulta;
   }
@@ -183,6 +184,7 @@ export class CalificacionService {
       .leftJoin('c.asignatura', 'a')
       .leftJoin('ce.estudiante', 'e')
       .leftJoin('e.iduser', 'u').orderBy('c.asignaturaId')
+      .orderBy('ce.id','DESC')
       .getMany();
     return consulta;
   }

@@ -226,7 +226,7 @@ export class EstudianteService {
     //   .select(['estudiante'])
     //   .where('u.id = :ids', { ids: estudianteId })
     //   .leftJoin('estudiante.iduser', 'u').getMany();
-
+    
     const consulta2 = await this.competendiaEstudianteRepository
       .createQueryBuilder('comEst')
       .select(['comEst.estudianteId', 'c', 'asi', 'asicom']) // consulta chida
@@ -239,6 +239,7 @@ export class EstudianteService {
       // .leftJoin('asicom.asignatura', 'asi')
       .leftJoin('comEst.estudiante', 'e')
       .leftJoin('e.iduser', 'u')
+      .orderBy('comEst.id','DESC')
       .getRawMany();
 
     // const consulta = this.competendiaEstudianteRepository.find({

@@ -53,8 +53,6 @@ export class CalificacionController {
 
   @Get('/all_estudiante/:id')
   findAllCalificacionEstudiante(@Param('id') id: string) {
-    console.log('aqui');
-
     return this.calificacionService.todasCalificaiones(id);
   }
 

@@ -49,7 +49,14 @@ export class AsignaturaService {
       .select('asicom.competenciaId')
       .where('asignaturaId = :id', { id })
       .getMany();
+
     const competencias = await this.competenciaRepository.find();
+    console.log(materias <= []);
+    if (materias <= []) {
+      competenciasNoAsignadas = competencias;
+      return { competenciasNoAsignadas, competenciasAsignadas };
+    }
+
     var contador = 0;
     // await materias.forEach(async (element) => {
     //   let c: any[] = [];
