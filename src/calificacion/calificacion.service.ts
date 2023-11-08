@@ -30,9 +30,9 @@ export class CalificacionService {
     const lista = await this.inscripcionService.find({
       where: { asignaturaId: listaestudiante },
     });
-    console.log(lista);
+    // console.log(lista);
     for (let i = 0; i < lista.length; i++) {
-      console.log('estudiante->', lista[i].estudianteId);
+      // console.log('estudiante->', lista[i].estudianteId);
       const registro = await this.calificacionestudianteService.create({
         estudianteId: lista[i].estudianteId,
         calificacionId: idcalificacion,
