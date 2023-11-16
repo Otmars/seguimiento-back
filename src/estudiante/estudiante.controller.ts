@@ -35,6 +35,14 @@ export class EstudianteController {
   estudianteinscrito(@Param('id') id :string ) {
     return this.estudianteService.getinscripcion(id);
   }
+  @Get('/competencias')
+  getAllComptenciaEstudiantes() {
+    return this.estudianteService.getallCompetenciasAllEstudiante();
+  }
+  @Get('/nocompetencias/:id')
+  getAllComptenciaEst(@Param('id') id :string) {
+    return this.estudianteService.getCompetenciasObtenidasNoObtenidas(+id);
+  }
   @Get('/competencia/:id')
   getAllComptenciaEstudiante(@Param('id') id :string) {
     return this.estudianteService.getAllCompetenciaEstudiante(id);
@@ -43,9 +51,6 @@ export class EstudianteController {
   getComptenciaEstudiante(@Param('id') id :string, @Body() datos: any) {
     return this.estudianteService.getCompetenciaEstudiante(+id,datos);
   }
-
-
-
   @Delete('/retirar/:id')
   retirar(@Param('id') id: string) {
     return this.estudianteService.retirarMateria(+id);

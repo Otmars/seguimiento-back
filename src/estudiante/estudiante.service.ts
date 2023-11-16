@@ -13,6 +13,8 @@ import { Inscripciones } from './entities/inscripcionesEstudiante.entity';
 import { AsignaturaToCompetencia } from 'src/asignatura/entities/asignaturaCompetencia.entity';
 import { CompetenciaEstudiante } from './entities/competenciasEstudiante.entity';
 import { Asignatura } from 'src/asignatura/entities/asignatura.entity';
+import { User } from 'src/user/entities/user.entity';
+import { Competencia } from 'src/competencia/entities/competencia.entity';
 
 @Injectable()
 export class EstudianteService {
@@ -25,6 +27,8 @@ export class EstudianteService {
     private competendiaEstudianteRepository: Repository<CompetenciaEstudiante>,
     @InjectRepository(Asignatura)
     private asignaturaRepository: Repository<Asignatura>,
+    @InjectRepository(Competencia)
+    private competenciaRepository: Repository<Competencia>,
   ) {}
 
   async inscribir(inscripcion: InscripcionDto) {
@@ -137,7 +141,17 @@ export class EstudianteService {
   async getinscripcion(id: string) {
     const consulta = await this.estudianteRepository
       .createQueryBuilder('estudiante')
-      .select(['estudiante.id', 'i.id', 'a', 'd','us.nombres','us.apellidoPaterno','us.apellidoMaterno','us.email','us.telefono']) // consulta chida
+      .select([
+        'estudiante.id',
+        'i.id',
+        'a',
+        'd',
+        'us.nombres',
+        'us.apellidoPaterno',
+        'us.apellidoMaterno',
+        'us.email',
+        'us.telefono',
+      ]) // consulta chida
       .where('i.asignatura IS NOT NULL')
       .andWhere('u.id = :iduser', { iduser: id })
       .leftJoin('estudiante.iduser', 'u')
@@ -226,7 +240,7 @@ export class EstudianteService {
     //   .select(['estudiante'])
     //   .where('u.id = :ids', { ids: estudianteId })
     //   .leftJoin('estudiante.iduser', 'u').getMany();
-    
+
     const consulta2 = await this.competendiaEstudianteRepository
       .createQueryBuilder('comEst')
       .select(['comEst.estudianteId', 'c', 'asi', 'asicom']) // consulta chida
@@ -239,7 +253,7 @@ export class EstudianteService {
       // .leftJoin('asicom.asignatura', 'asi')
       .leftJoin('comEst.estudiante', 'e')
       .leftJoin('e.iduser', 'u')
-      .orderBy('comEst.id','DESC')
+      .orderBy('comEst.id', 'DESC')
       .getRawMany();
 
     // const consulta = this.competendiaEstudianteRepository.find({
@@ -247,7 +261,88 @@ export class EstudianteService {
     //   relations: ['competencia'],
 
     // });
-
     return consulta2;
+  }
+  async getallCompetenciasAllEstudiante() {
+    const consulta3 = await this.competenciaRepository.find({
+      select: { descripcion: true, tipoCompetencia: true },
+    });
+
+    const consulta1 = await this.estudianteRepository
+      .createQueryBuilder('est')
+      .select([
+        'est',
+        'u.nombres',
+        'u.apellidoPaterno',
+        'u.apellidoMaterno',
+        'u.ci',
+        'u.telefono',
+        'u.email',
+      ])
+      .leftJoin('est.iduser', 'u')
+      .getMany();
+
+    const consulta2 = await this.competendiaEstudianteRepository
+      .createQueryBuilder('comEst')
+      .select([
+        'comEst.id',
+        'comEst.createdAt',
+        'c.asignaturaCompetenciaId',
+        'asi.nombre',
+        'asi.siglaCodigo',
+        'asi.paralelo',
+        'asicom.descripcion',
+        'asicom.tipoCompetencia',
+        'e',
+        'u.nombres',
+        'u.apellidoPaterno',
+        'u.apellidoMaterno',
+        'u.ci',
+        'u.telefono',
+        'u.email',
+        'asidoc',
+        'udoc.nombres',
+        'udoc.apellidoPaterno',
+        'udoc.apellidoMaterno',
+      ]) // consulta chida
+      .leftJoin('comEst.competencia', 'c')
+      .leftJoin('c.asignatura', 'asi')
+      .leftJoin('asi.docente', 'asidoc')
+      .leftJoin('asidoc.iduser', 'udoc')
+      .leftJoin('c.competencia', 'asicom')
+      .leftJoin('comEst.estudiante', 'e')
+      .leftJoin('e.iduser', 'u')
+      .orderBy('comEst.id', 'DESC')
+      .getMany();
+    return { estudiante: consulta1, datos: consulta2, competencia: consulta3 };
+  }
+
+  async getCompetenciasObtenidasNoObtenidas(id: number) {
+    const consulta1 = await this.inscripcionRepository
+      .createQueryBuilder('ins')
+      .select(['ins.id', 'e.id', 'asi', 'asicom','com','comest','come','comee'])
+      .where('e.id = :ids', { ids: id })
+      .leftJoin('ins.estudiante', 'e')
+      .leftJoin('e.iduser', 'u')
+      .leftJoin('e.competencia','comest')
+      .leftJoin('comest.competencia','come')
+      .leftJoin('come.competencia','comee')
+      .leftJoin('ins.asignatura', 'asi')
+      .leftJoin('asi.asignaturaCompetencia', 'asicom')
+      .leftJoin('asicom.competencia','com')
+
+      .getMany();
+    return consulta1;
+    // const consulta1 = await this.competendiaEstudianteRepository
+    //   .createQueryBuilder('comest')
+    //   .select(['comest','est','ins','asi','asicom','com'])
+    //   .where('est.id = :ids', { ids: id })
+    //   .leftJoin('comest.estudiante', 'est')
+    //   .leftJoin('est.inscripcion', 'ins')
+    //   .leftJoin('ins.asignatura','asi')
+    //   .leftJoin('asi.asignaturaCompetencia','asicom')
+    //   .leftJoin('asicom.competencia','com')
+    //   .getMany();
+    // return consulta1;
   }
 }
