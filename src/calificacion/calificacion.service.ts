@@ -8,10 +8,10 @@ import { UserService } from 'src/user/user.service';
 import { AsignaturaService } from 'src/asignatura/asignatura.service';
 import { Inscripciones } from 'src/estudiante/entities/inscripcionesEstudiante.entity';
 import { CalificacionEstudiante } from './entities/calificacionEstudiante.entity';
+import { Asignatura } from 'src/asignatura/entities/asignatura.entity';
 
 @Injectable()
 export class CalificacionService {
-  
   constructor(
     @InjectRepository(Calificacion)
     private calificacionService: Repository<Calificacion>,
@@ -20,6 +20,8 @@ export class CalificacionService {
     private inscripcionService: Repository<Inscripciones>,
     @InjectRepository(CalificacionEstudiante)
     private calificacionestudianteService: Repository<CalificacionEstudiante>,
+    @InjectRepository(Asignatura)
+    private asignaturaRepository: Repository<Asignatura>,
   ) {}
 
   async calificacionEstudiante(
@@ -137,19 +139,27 @@ export class CalificacionService {
   findAll() {
     return this.calificacionService
       .createQueryBuilder('cal')
-      .select(['cal','c'])
+      .select(['cal', 'c'])
       .leftJoin('cal.asignatura', 'c')
       .getMany();
   }
   findAllAsignatura(id: number) {
     return this.calificacionService
-    .createQueryBuilder('cal')
-    .select(['cal', 'c','est','u.nombres','u.apellidoPaterno','u.apellidoMaterno','u.ci'])
-    .where('cal.asignaturaId = :ids', { ids: id })
-    .leftJoin('cal.calificacion', 'c')
-    .leftJoin('c.estudiante', 'est')
-    .leftJoin('est.iduser', 'u')
-    .getMany();
+      .createQueryBuilder('cal')
+      .select([
+        'cal',
+        'c',
+        'est',
+        'u.nombres',
+        'u.apellidoPaterno',
+        'u.apellidoMaterno',
+        'u.ci',
+      ])
+      .where('cal.asignaturaId = :ids', { ids: id })
+      .leftJoin('cal.calificacion', 'c')
+      .leftJoin('c.estudiante', 'est')
+      .leftJoin('est.iduser', 'u')
+      .getMany();
   }
   findParciales(id: number) {
     return this.calificacionService.find({
@@ -193,9 +203,7 @@ export class CalificacionService {
   }
 
   async calificar(id: number, body: any) {
-    console.log('aqui');
     await this.calificacionestudianteService.update({ id }, body);
-
     return this.calificacionestudianteService.findBy({ id });
   }
   async todasCalificaiones(estudianteId: string) {
@@ -215,6 +223,18 @@ export class CalificacionService {
       .leftJoin('e.iduser', 'u')
       .orderBy('c.asignaturaId')
       .orderBy('ce.id', 'DESC')
+      .getMany();
+    return consulta;
+  }
+
+  async reportecalificaionAsignatura(id: number) {
+    const consulta = this.asignaturaRepository
+      .createQueryBuilder('asi')
+      .select(['asi','ins','est','u.nombres','u.apellidoPaterno','u.apellidoMaterno','u.ci'])
+      .where('asi.id = :ids', { ids: id })
+      .leftJoin('asi.inscripcion', 'ins')
+      .leftJoin('ins.estudiante', 'est')
+      .leftJoin('est.iduser', 'u')
       .getMany();
     return consulta;
   }

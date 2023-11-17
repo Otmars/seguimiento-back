@@ -27,8 +27,9 @@ export class Inscripciones {
   @UpdateDateColumn()
   updatedAt: Date;
   
-  @ManyToOne(() => Asignatura, (asignatura) => asignatura.asignaturaCompetencia)
+  @ManyToOne(() => Asignatura, (asignatura) => asignatura.inscripcion)
   asignatura: Asignatura;
+  
 
   @ManyToOne(() => Estudiante, (estudiante) => estudiante.inscripcion,{onDelete:'CASCADE'})
   estudiante: Estudiante;

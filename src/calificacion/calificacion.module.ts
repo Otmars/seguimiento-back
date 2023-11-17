@@ -10,7 +10,7 @@ import { CalificacionEstudiante } from './entities/calificacionEstudiante.entity
 import { Inscripciones } from 'src/estudiante/entities/inscripcionesEstudiante.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Calificacion,CalificacionEstudiante,Inscripciones]),AsignaturaModule],
+  imports: [TypeOrmModule.forFeature([Calificacion,CalificacionEstudiante,Inscripciones,Asignatura]),AsignaturaModule],
   controllers: [CalificacionController],
   providers: [CalificacionService]
 })

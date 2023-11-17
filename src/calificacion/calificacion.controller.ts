@@ -33,7 +33,10 @@ export class CalificacionController {
   findAllAsignatura(@Param('id') id: string) {
     return this.calificacionService.findAllAsignatura(+id);
   }
-
+  @Get('/reporte/:id')
+  findAllAsignaturaReporte(@Param('id') id: string) {
+    return this.calificacionService.reportecalificaionAsignatura(+id);
+  }
   @Get('/parciales/:id')
   findParciales(@Param('id') id: string) {
     return this.calificacionService.findParciales(+id);
