@@ -320,19 +320,39 @@ export class EstudianteService {
   async getCompetenciasObtenidasNoObtenidas(id: number) {
     const consulta1 = await this.inscripcionRepository
       .createQueryBuilder('ins')
-      .select(['ins.id', 'e.id', 'asi', 'asicom','com','comest','come','comee'])
+      .select(['ins.id', 'asi', 'asicom.asignaturaCompetenciaId', 'com'])
       .where('e.id = :ids', { ids: id })
       .leftJoin('ins.estudiante', 'e')
-      .leftJoin('e.iduser', 'u')
-      .leftJoin('e.competencia','comest')
-      .leftJoin('comest.competencia','come')
-      .leftJoin('come.competencia','comee')
       .leftJoin('ins.asignatura', 'asi')
       .leftJoin('asi.asignaturaCompetencia', 'asicom')
-      .leftJoin('asicom.competencia','com')
+      .leftJoin('asicom.competencia', 'com')
+      .getMany();
+
+    const consulta2 = await this.competendiaEstudianteRepository
+      .createQueryBuilder('comest')
+      .select(['comest', 'c','com'])
+      .where('e.id = :ids', { ids: id })
+      .leftJoin('comest.estudiante', 'e')
+      .leftJoin('comest.competencia', 'c')
+      .leftJoin('c.competencia', 'com')
 
       .getMany();
-    return consulta1;
+
+
+    //   const consulta1 = await this.inscripcionRepository
+    //   .createQueryBuilder('ins')
+    //   .select(['ins.id', 'e.id', 'asi', 'asicom','com','comest','come','comee'])
+    //   .where('e.id = :ids', { ids: id })
+    //   .leftJoin('ins.estudiante', 'e')
+    //   .leftJoin('e.iduser', 'u')
+    //   .leftJoin('e.competencia','comest')
+    //   .leftJoin('comest.competencia','come')
+    //   .leftJoin('come.competencia','comee')
+    //   .leftJoin('ins.asignatura', 'asi')
+    //   .leftJoin('asi.asignaturaCompetencia', 'asicom')
+    //   .leftJoin('asicom.competencia','com')
+    //   .getMany();
+    // return consulta1;
     // const consulta1 = await this.competendiaEstudianteRepository
     //   .createQueryBuilder('comest')
     //   .select(['comest','est','ins','asi','asicom','com'])
@@ -344,5 +364,7 @@ export class EstudianteService {
     //   .leftJoin('asicom.competencia','com')
     //   .getMany();
     // return consulta1;
+
+    return {todas:consulta1,obtenidas:consulta2};
   }
 }
