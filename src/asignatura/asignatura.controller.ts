@@ -17,7 +17,7 @@ import { JwtAuthGuard } from 'src/user/guardjwt';
 
 @ApiTags('asignatura')
 @ApiBearerAuth()
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('asignatura')
 export class AsignaturaController {
   constructor(private readonly asignaturaService: AsignaturaService) {}

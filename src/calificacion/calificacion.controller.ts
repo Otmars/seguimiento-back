@@ -15,7 +15,7 @@ import { UpdateCalificacionDto } from './dto/update-calificacion.dto';
 import { JwtAuthGuard } from 'src/user/guardjwt';
 
 @ApiTags('asignatura')
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('calificacion')
 export class CalificacionController {
   constructor(private readonly calificacionService: CalificacionService) {}

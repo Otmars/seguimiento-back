@@ -8,7 +8,7 @@ import { JwtAuthGuard } from 'src/user/guardjwt';
 
 @ApiTags('competencia')
 @ApiBearerAuth()
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('competencia')
 export class CompetenciaController {
   constructor(private readonly competenciaService: CompetenciaService) {}
