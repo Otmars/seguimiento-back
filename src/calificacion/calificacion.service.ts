@@ -11,6 +11,7 @@ import { CalificacionEstudiante } from './entities/calificacionEstudiante.entity
 
 @Injectable()
 export class CalificacionService {
+  
   constructor(
     @InjectRepository(Calificacion)
     private calificacionService: Repository<Calificacion>,
@@ -134,20 +135,33 @@ export class CalificacionService {
     return parseInt(puntajeacumulado.sum);
   }
   findAll() {
-    return this.calificacionService.find();
+    return this.calificacionService
+      .createQueryBuilder('cal')
+      .select(['cal','c'])
+      .leftJoin('cal.asignatura', 'c')
+      .getMany();
   }
-
+  findAllAsignatura(id: number) {
+    return this.calificacionService
+    .createQueryBuilder('cal')
+    .select(['cal', 'c','est','u.nombres','u.apellidoPaterno','u.apellidoMaterno','u.ci'])
+    .where('cal.asignaturaId = :ids', { ids: id })
+    .leftJoin('cal.calificacion', 'c')
+    .leftJoin('c.estudiante', 'est')
+    .leftJoin('est.iduser', 'u')
+    .getMany();
+  }
   findParciales(id: number) {
     return this.calificacionService.find({
       where: { asignaturaId: id, tipoCalificacion: tipoCalificacion.PARCIAL },
-      order:{id:'DESC'}
+      order: { id: 'DESC' },
     });
   }
 
   findPracticas(id: number) {
     return this.calificacionService.find({
       where: { asignaturaId: id, tipoCalificacion: tipoCalificacion.PRACTICA },
-      order:{id:'DESC'}
+      order: { id: 'DESC' },
     });
   }
 
@@ -158,16 +172,17 @@ export class CalificacionService {
   async remove(id: number) {
     const consulta = await this.calificacionestudianteService
       .createQueryBuilder('ce')
-      .select(['ce','c.asignaturaId'])
-      .where('ce.calificacionId = :ids', { ids: id }).andWhere('ce.calificacionObtenida > 0')
+      .select(['ce', 'c.asignaturaId'])
+      .where('ce.calificacionId = :ids', { ids: id })
+      .andWhere('ce.calificacionObtenida > 0')
       .leftJoin('ce.calificacion', 'c')
-      .getMany()
-    if (!(consulta>[])) {
+      .getMany();
+    if (!(consulta > [])) {
       await this.calificacionService.delete(id);
-      return {response : 'Calificacion Eliminada'}
+      return { response: 'Calificacion Eliminada' };
     }
-    
-    return {response : 'No se puede eliminar'}
+
+    return { response: 'No se puede eliminar' };
   }
 
   async findCalificacionesAsignatura(id: number) {

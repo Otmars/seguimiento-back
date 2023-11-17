@@ -15,7 +15,7 @@ import { UpdateCalificacionDto } from './dto/update-calificacion.dto';
 import { JwtAuthGuard } from 'src/user/guardjwt';
 
 @ApiTags('asignatura')
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @Controller('calificacion')
 export class CalificacionController {
   constructor(private readonly calificacionService: CalificacionService) {}
@@ -28,6 +28,10 @@ export class CalificacionController {
   @Get()
   findAll() {
     return this.calificacionService.findAll();
+  }
+  @Get('/:id')
+  findAllAsignatura(@Param('id') id: string) {
+    return this.calificacionService.findAllAsignatura(+id);
   }
 
   @Get('/parciales/:id')
