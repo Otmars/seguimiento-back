@@ -18,7 +18,7 @@ import { Horario } from 'src/horarios/entities/horario.entity';
     PassportModule,
     JwtModule.register({
       secret: 'mi clave secreta',
-      signOptions: { expiresIn: 300 },
+      signOptions: { expiresIn: 900 },
     }),
   ],
   controllers: [UserController],
